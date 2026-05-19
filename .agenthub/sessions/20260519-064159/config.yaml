@@ -1,7 +1,0 @@
-﻿session_id: 20260519-064159
-task: Mejorar el proyecto ayala-web
-agents: 3
-eval: llm-judge
-base_branch: master
-state: init
-created: 2026-05-19 06:41:59
