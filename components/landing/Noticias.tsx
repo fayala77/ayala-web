@@ -1,36 +1,17 @@
 import { Calendar } from 'lucide-react'
-
-const noticias = [
-  {
-    fecha: '15/05/2026',
-    titulo: 'Nuevos plazos para el pago de expensas de junio',
-    resumen:
-      'Les recordamos que el vencimiento para el pago de expensas del mes de junio es el 10 de junio. Pasada esa fecha se aplicarán los recargos correspondientes.',
-    tag: 'Administrativo',
-  },
-  {
-    fecha: '02/05/2026',
-    titulo: 'Renovación de seguros — Chesterfield Tower',
-    resumen:
-      'Se informa que el seguro de incendio del edificio fue renovado hasta marzo 2031 con SEGUROS SURA S.A. La póliza y condiciones se encuentran disponibles en el portal.',
-    tag: 'Seguros',
-  },
-  {
-    fecha: '20/04/2026',
-    titulo: 'Portal digital para propietarios ya disponible',
-    resumen:
-      'Habilitamos el nuevo portal de acceso para copropietarios. Pueden consultar actas, reglamentos, estados de cuenta y saldo de expensas con su cuenta de Google.',
-    tag: 'Novedades',
-  },
-]
+import noticias from '@/lib/noticias.json'
 
 const tagColors: Record<string, string> = {
   Administrativo: 'bg-blue-50 text-blue-700',
   Seguros: 'bg-green-50 text-green-700',
   Novedades: 'bg-ayala-bg text-ayala-mid',
+  Normativa: 'bg-purple-50 text-purple-700',
+  Mercado: 'bg-yellow-50 text-yellow-700',
 }
 
 export function Noticias() {
+  const ultimas = noticias.slice(0, 3)
+
   return (
     <section id="noticias" className="py-20 bg-ayala-bg-light">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,7 +25,7 @@ export function Noticias() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {noticias.map((n) => (
+          {ultimas.map((n) => (
             <article
               key={n.titulo}
               className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm flex flex-col"

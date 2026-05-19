@@ -1,0 +1,20 @@
+[
+  {
+    "fecha": "15/05/2026",
+    "titulo": "Nuevos plazos para el pago de expensas de junio",
+    "resumen": "Les recordamos que el vencimiento para el pago de expensas del mes de junio es el 10 de junio. Pasada esa fecha se aplicarán los recargos correspondientes.",
+    "tag": "Administrativo"
+  },
+  {
+    "fecha": "02/05/2026",
+    "titulo": "Renovación de seguros — Chesterfield Tower",
+    "resumen": "Se informa que el seguro de incendio del edificio fue renovado hasta marzo 2031 con SEGUROS SURA S.A. La póliza y condiciones se encuentran disponibles en el portal.",
+    "tag": "Seguros"
+  },
+  {
+    "fecha": "20/04/2026",
+    "titulo": "Portal digital para propietarios ya disponible",
+    "resumen": "Habilitamos el nuevo portal de acceso para copropietarios. Pueden consultar actas, reglamentos, estados de cuenta y saldo de expensas con su cuenta de Google.",
+    "tag": "Novedades"
+  }
+]
