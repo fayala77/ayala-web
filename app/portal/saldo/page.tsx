@@ -1,5 +1,6 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import { Search, AlertCircle, CheckCircle, Clock } from 'lucide-react'
 
 interface SaldoResult {
@@ -12,11 +13,19 @@ interface SaldoResult {
 const edificios = ['Chesterfield Tower']
 
 export default function SaldoPage() {
+  const { data: session } = useSession()
   const [building, setBuilding] = useState('')
   const [unit, setUnit] = useState('')
   const [result, setResult] = useState<SaldoResult | null>(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (session?.user?.role !== 'admin') {
+      if (session?.user?.building) setBuilding(session.user.building.toLowerCase())
+      if (session?.user?.unit) setUnit(session.user.unit.toLowerCase())
+    }
+  }, [session])
 
   const handleConsulta = async (e: React.FormEvent) => {
     e.preventDefault()

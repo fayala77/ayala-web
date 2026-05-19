@@ -13,8 +13,8 @@ export default function ActasPage() {
       <h1 className="text-2xl font-bold text-ayala-dark mb-2">Actas</h1>
       <p className="text-gray-500 mb-8">Actas de asambleas y reuniones de Comisión Directiva</p>
 
-      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden overflow-x-auto">
+        <table className="w-full text-sm min-w-[500px]">
           <thead className="bg-ayala-bg-light border-b border-gray-200">
             <tr>
               <th className="text-left px-6 py-3 font-semibold text-gray-700">Documento</th>

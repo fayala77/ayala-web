@@ -2,9 +2,9 @@ import Link from 'next/link'
 import { Building2, Shield, FileText } from 'lucide-react'
 
 const stats = [
-  { icon: Building2, value: 'Edificios', label: 'administrados en Uruguay' },
-  { icon: Shield, value: 'Transparencia', label: 'total en cada gestión' },
-  { icon: FileText, value: 'Rendiciones', label: 'mensuales detalladas' },
+  { icon: Building2, value: '+10', label: 'edificios administrados en Uruguay' },
+  { icon: Shield, value: '100%', label: 'transparencia en cada gestión' },
+  { icon: FileText, value: '+12 años', label: 'de experiencia profesional' },
 ]
 
 export function Hero() {

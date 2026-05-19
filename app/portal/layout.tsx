@@ -10,7 +10,7 @@ export default async function PortalLayout({ children }: { children: React.React
   return (
     <div className="flex min-h-screen bg-ayala-bg-light">
       <PortalSidebar />
-      <main className="flex-1 p-8 overflow-y-auto">{children}</main>
+      <main className="flex-1 overflow-y-auto p-8 pt-[calc(3.5rem+2rem)] md:pt-8">{children}</main>
     </div>
   )
 }
