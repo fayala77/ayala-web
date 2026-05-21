@@ -5,13 +5,14 @@ import { signOut, useSession } from 'next-auth/react'
 import { useState } from 'react'
 import {
   FileText, BookOpen, Bell, CreditCard, FolderOpen, Calculator,
-  LayoutDashboard, LogOut, Menu, X,
+  LayoutDashboard, LogOut, Menu, X, Building2,
 } from 'lucide-react'
 import Image from 'next/image'
 import clsx from 'clsx'
 
 const navItems = [
   { href: '/portal', label: 'Inicio', icon: LayoutDashboard, exact: true },
+  { href: '/portal/edificio', label: 'Mi edificio', icon: Building2 },
   { href: '/portal/actas', label: 'Actas', icon: FileText },
   { href: '/portal/reglamentos', label: 'Reglamentos', icon: BookOpen },
   { href: '/portal/comunicados', label: 'Comunicados', icon: Bell },

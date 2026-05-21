@@ -35,6 +35,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Datos incompletos' }, { status: 400 })
   }
 
+  // Propietarios y CD solo pueden consultar su propio edificio
+  if (session.user.role !== 'admin') {
+    const userBuilding = session.user.building?.toLowerCase().trim()
+    if (building !== userBuilding) {
+      return NextResponse.json({ error: 'No tenés acceso a ese complejo' }, { status: 403 })
+    }
+  }
+
   const buildingData = mockData[building]
   if (!buildingData) {
     return NextResponse.json({ error: 'Complejo no encontrado' }, { status: 404 })

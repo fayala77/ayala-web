@@ -21,6 +21,13 @@ export const allowedUsers: AllowedUser[] = [
     unit: 'Admin',
     role: 'admin',
   },
+  {
+    email: 'fayala77@gmail.com',
+    name: 'Federico Ayala',
+    building: 'Chesterfield Tower',
+    unit: 'Admin',
+    role: 'admin',
+  },
   // Agregar propietarios aquí:
   // {
   //   email: 'propietario@gmail.com',

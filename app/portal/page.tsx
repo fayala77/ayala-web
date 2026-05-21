@@ -1,15 +1,16 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/auth'
 import Link from 'next/link'
-import { FileText, BookOpen, Bell, CreditCard, FolderOpen, Calculator } from 'lucide-react'
+import { FileText, BookOpen, Bell, CreditCard, FolderOpen, Calculator, Building2 } from 'lucide-react'
 
 const sections = [
+  { href: '/portal/edificio', label: 'Mi edificio', desc: 'Datos del complejo, CD, banco y seguros', icon: Building2, color: 'text-ayala-mid bg-ayala-bg' },
   { href: '/portal/actas', label: 'Actas', desc: 'Actas de asambleas y reuniones de CD', icon: FileText, color: 'text-blue-600 bg-blue-50' },
   { href: '/portal/reglamentos', label: 'Reglamentos', desc: 'Reglamento de copropiedad y convivencia', icon: BookOpen, color: 'text-green-600 bg-green-50' },
   { href: '/portal/comunicados', label: 'Comunicados', desc: 'Avisos y comunicaciones de administración', icon: Bell, color: 'text-orange-600 bg-orange-50' },
   { href: '/portal/estados-cuenta', label: 'Estados de cuenta', desc: 'Rendiciones de cuentas periódicas', icon: CreditCard, color: 'text-purple-600 bg-purple-50' },
   { href: '/portal/documentos', label: 'Documentos', desc: 'Seguros, contratos y otros documentos', icon: FolderOpen, color: 'text-red-600 bg-red-50' },
-  { href: '/portal/saldo', label: 'Consulta de saldo', desc: 'Verificá el saldo de expensas de tu unidad', icon: Calculator, color: 'text-ayala-mid bg-ayala-bg' },
+  { href: '/portal/saldo', label: 'Consulta de saldo', desc: 'Verificá el saldo de expensas de tu unidad', icon: Calculator, color: 'text-gray-600 bg-gray-50' },
 ]
 
 export default async function PortalPage() {
