@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Informe CF &amp; CD — Ocean Drive · Abril 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<style>
+:root {
+  --ocean1:#1C2955;--ocean2:#0077B6;--ocean3:#0096C7;--ocean4:#00B4D8;
+  --foam:#90E0EF;--sand:#F0F4F8;--sand2:#E2EAF0;--border:#C8D8E8;
+  --tx:#152238;--muted:#556A80;--wh:#FFFFFF;
+  --pos:#1A6B30;--neg:#8B1A1A;
+  --sw:240px;--th:60px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{font-family:'Segoe UI',system-ui,sans-serif;color:var(--tx);background:var(--sand);line-height:1.6}
+
+.topbar{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--th);background:var(--ocean1);
+  display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;
+  box-shadow:0 2px 10px rgba(2,62,138,.4)}
+.tb-left{display:flex;align-items:center;gap:12px}
+.tb-logo{background:var(--ocean3);color:#fff;font-weight:800;font-size:12px;
+  padding:4px 10px;border-radius:4px;letter-spacing:.06em}
+.tb-title{color:rgba(255,255,255,.85);font-size:13px}
+.tb-title strong{color:#fff}
+.tb-badge{background:rgba(144,224,239,.2);border:1px solid var(--ocean4);
+  color:var(--foam);font-size:11px;font-weight:700;padding:3px 10px;
+  border-radius:99px;letter-spacing:.04em}
+.menu-btn{display:none;background:none;border:none;cursor:pointer;color:#fff;font-size:22px}
+
+.sidebar{position:fixed;top:var(--th);left:0;bottom:0;width:var(--sw);
+  background:var(--wh);border-right:1px solid var(--border);
+  overflow-y:auto;z-index:100;padding:1rem 0 2rem;transition:transform .25s}
+.sb-sect{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ocean3);padding:.5rem 1rem .2rem}
+.sidebar a{display:block;padding:.4rem 1rem .4rem 1.25rem;color:var(--tx);
+  text-decoration:none;font-size:13px;border-left:3px solid transparent;transition:all .15s}
+.sidebar a:hover{background:var(--sand);color:var(--ocean2)}
+.sidebar a.active{border-left-color:var(--ocean3);background:var(--sand2);
+  color:var(--ocean1);font-weight:600}
+
+.main{margin-left:var(--sw);margin-top:var(--th);padding:2rem 2.5rem 4rem;max-width:1100px}
+
+.cover{background:var(--wh);border-radius:8px;overflow:hidden;margin-bottom:2rem;
+  box-shadow:0 4px 28px rgba(2,62,138,.15)}
+.cover-top{background:var(--ocean1);padding:1.25rem 2rem;
+  display:flex;justify-content:space-between;align-items:center}
+.cover-brand{color:var(--foam);font-size:13px;font-weight:700;letter-spacing:.05em;
+  display:flex;align-items:center;gap:10px}
+.cover-brand-icon{font-size:1.6rem;opacity:.7}
+.cover-body{padding:2.5rem 2.5rem 2rem;text-align:center;
+  background:linear-gradient(150deg,var(--sand2) 0%,var(--wh) 65%)}
+.cover-tag{display:inline-block;background:var(--ocean2);color:#fff;font-size:10px;
+  font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  padding:.3rem 1.2rem;border-radius:99px;margin-bottom:1.25rem}
+.cover-name{font-size:2.6rem;font-weight:800;color:var(--ocean1);line-height:1.1;letter-spacing:-.02em}
+.cover-sub{font-size:.9rem;color:var(--muted);margin-top:.35rem}
+.cover-div{width:48px;height:3px;background:var(--ocean3);margin:1.5rem auto;border-radius:99px}
+.cover-period{font-size:1.35rem;font-weight:700;color:var(--ocean2)}
+.cover-months{font-size:.85rem;color:var(--muted);font-style:italic;margin-top:.25rem}
+.cover-kpis{display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--border);background:var(--sand2)}
+.cover-kpi{padding:1rem .75rem;text-align:center;border-right:1px solid var(--border)}
+.cover-kpi:last-child{border-right:none}
+.cover-kpi-val{font-size:1rem;font-weight:800;color:var(--ocean1)}
+.cover-kpi-lbl{font-size:10px;font-weight:600;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--muted);margin-top:.2rem}
+.cover-footer{background:var(--ocean1);padding:.85rem 2rem;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+.cover-footer-info{color:rgba(255,255,255,.75);font-size:13px}
+.cover-footer-info strong{color:var(--foam);display:block;font-size:14px;margin-bottom:.1rem}
+
+.chapter{background:var(--wh);border-radius:8px;margin-bottom:1.5rem;
+  box-shadow:0 1px 8px rgba(2,62,138,.07);overflow:hidden;
+  scroll-margin-top:calc(var(--th) + 12px)}
+.cover{scroll-margin-top:calc(var(--th) + 12px)}
+.ch-header{background:var(--ocean1);color:var(--wh);padding:.85rem 1.5rem;
+  display:flex;align-items:baseline;gap:10px}
+.ch-num{font-size:18px;font-weight:700;opacity:.7;letter-spacing:.06em;text-transform:uppercase;color:var(--foam)}
+.ch-title{font-size:16px;font-weight:700}
+.ch-body{padding:1.5rem}
+
+.sec-title{font-size:16px;font-weight:700;color:var(--ocean2);
+  border-bottom:2px solid var(--sand2);padding-bottom:.35rem;
+  margin:1.25rem 0 .85rem;text-transform:uppercase;letter-spacing:.06em}
+.sec-title:first-child{margin-top:0}
+
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:1rem;margin-bottom:1.25rem}
+.kpi{background:var(--sand2);border-radius:6px;padding:1rem;border-left:4px solid var(--ocean2)}
+.kpi.good{border-left-color:var(--pos)}
+.kpi.bad{border-left-color:var(--neg)}
+.kpi.accent{border-left-color:var(--ocean3)}
+.kpi-lbl{font-size:11px;font-weight:600;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem}
+.kpi-val{font-size:1.2rem;font-weight:800;color:var(--ocean1)}
+.kpi-val.pos{color:var(--pos)}
+.kpi-val.neg{color:var(--neg)}
+.kpi-sub{font-size:11px;color:var(--muted);margin-top:.2rem}
+
+/* preventivos grid */
+.prev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1.25rem;margin-bottom:1.5rem}
+.prev-col{display:flex;flex-direction:column;gap:.75rem}
+.prev-col-hdr{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--ocean1);border-bottom:2px solid var(--ocean3);padding-bottom:.35rem;margin-bottom:.1rem}
+.prev-card{background:var(--sand2);border-radius:6px;padding:.85rem 1rem;
+  border-left:4px solid var(--ocean3)}
+.prev-card.gasto{border-left-color:var(--ocean2)}
+.prev-card.ant{border-left-color:var(--border)}
+.prev-card-lbl{font-size:10px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem}
+.prev-card-val{font-size:1.1rem;font-weight:800;color:var(--ocean1)}
+.prev-card-sub{font-size:11px;color:var(--muted);margin-top:.15rem}
+.prev-card-diff{margin-top:.35rem}
+
+/* personal grid */
+.pers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:1rem;margin-bottom:1.25rem}
+.pers-col{display:flex;flex-direction:column;gap:.5rem}
+.pers-col-hdr{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--ocean2);padding:.2rem .5rem;background:var(--sand2);
+  border-radius:4px;text-align:center}
+.pers-card{background:var(--sand2);border-radius:6px;padding:.65rem .85rem;
+  border-left:3px solid var(--ocean4);text-align:center}
+.pers-card-count{font-size:1.5rem;font-weight:800;color:var(--ocean1)}
+.pers-card-role{font-size:10px;color:var(--muted);margin-top:.1rem}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;margin-bottom:.5rem}
+table.rpt{width:100%;border-collapse:collapse;font-size:13px}
+table.rpt th{background:var(--ocean1);color:#fff;font-weight:700;font-size:11px;
+  padding:.6rem .75rem;text-align:right;white-space:nowrap}
+table.rpt th:first-child,table.rpt th:nth-child(2){text-align:left}
+table.rpt td{padding:.45rem .75rem;border-bottom:1px solid var(--sand2);text-align:right}
+table.rpt td:first-child,table.rpt td:nth-child(2){text-align:left}
+table.rpt tr:nth-child(even) td{background:#FAFCFE}
+table.rpt tr.row-total td{background:var(--sand2);font-weight:700;
+  color:var(--ocean1);border-top:2px solid var(--ocean2)}
+table.rpt tr.row-section td{background:var(--ocean2);color:#fff;
+  font-weight:700;font-size:11px;letter-spacing:.04em}
+table.rpt tr.row-result td{background:var(--ocean1);color:#fff;font-weight:700}
+table.rpt td.pos{color:var(--pos);font-weight:600}
+table.rpt td.neg{color:var(--neg);font-weight:600}
+.desvio-pill{display:inline-block;padding:1px 7px;border-radius:99px;font-size:11px;font-weight:700}
+.pill-pos{background:#E8F5E8;color:var(--pos)}
+.pill-neg{background:#F5E8E8;color:var(--neg)}
+
+.chart-wrap{background:var(--sand2);border-radius:8px;padding:1.25rem;margin:1rem 0}
+.chart-wrap h4{font-size:11px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem}
+.chart-container{position:relative;height:260px}
+
+.nota-card{border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:.85rem}
+.nota-header{background:var(--sand2);padding:.55rem 1rem;
+  display:flex;justify-content:space-between;align-items:center}
+.nota-ref{font-size:11px;font-weight:700;color:var(--ocean1);text-transform:uppercase;letter-spacing:.05em}
+.nota-body{padding:.75rem 1rem;font-size:13px;color:var(--tx);line-height:1.75}
+
+.cobr-row{display:flex;justify-content:space-between;padding:.45rem .75rem;
+  border-bottom:1px solid var(--sand2);font-size:13px}
+.cobr-nombre{color:var(--tx)}
+.cobr-monto{font-weight:700;color:var(--ocean2)}
+
+.rpt-footer{background:var(--ocean1);color:rgba(255,255,255,.5);font-size:12px;
+  padding:1rem 1.5rem;text-align:center;border-radius:8px;margin-bottom:2rem}
+.rpt-footer strong{color:var(--foam)}
+
+@media(max-width:768px){
+  :root{--sw:0px}
+  .sidebar{transform:translateX(-240px);width:240px}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;padding:1rem 1rem 3rem}
+  .menu-btn{display:block}
+  .cover-kpis{grid-template-columns:repeat(2,1fr)}
+  .prev-grid{grid-template-columns:1fr 1fr}
+}
+span.pos{color:var(--pos);font-weight:600}
+span.neg{color:var(--neg);font-weight:600}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-left">
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    <div class="tb-logo">OD</div>
+    <div class="tb-title"><strong>Ocean Drive</strong> · Informe CF &amp; CD</div>
+  </div>
+  <div class="tb-badge">Cierre Abril 2026</div>
+</header>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sb-sect">Navegación</div>
+  <a href="#portada">Portada</a>
+  <div class="sb-sect">Secciones</div>
+  <a href="#cap1">1. Dashboard</a>
+  <a href="#cap2">2. Balance</a>
+  <a href="#cap3">3. Estructura de Costos</a>
+  <a href="#cap4">4. Deudores</a>
+  <a href="#cap5">5. Personal</a>
+  <a href="#cap6">6. Documentos</a>
+</nav>
+<div id="overlay" onclick="toggleSidebar()"
+     style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99"></div>
+
+<main class="main">
+
+<!-- PORTADA -->
+<section class="cover" id="portada">
+  <div class="cover-top">
+    <div class="cover-brand">
+      <span class="cover-brand-icon">🌊</span>
+      <div>
+        <div>OCEAN DRIVE</div>
+        <div style="font-weight:400;font-size:11px;opacity:.6;letter-spacing:.04em">Informe CF &amp; CD</div>
+      </div>
+    </div>
+    <div style="color:rgba(255,255,255,.4);font-size:11px;letter-spacing:.06em;text-transform:uppercase">Ayala A&amp;G</div>
+  </div>
+  <div class="cover-body">
+    <div class="cover-tag">Informe Comisión Fiscal &amp; Comisión Directiva</div>
+    <div class="cover-name">Ocean Drive</div>
+    <div class="cover-sub">Ejercicio 2026 · Noviembre 2025 – Octubre 2026</div>
+    <div class="cover-div"></div>
+    <div class="cover-period">Cierre Abril 2026</div>
+  </div>
+  <div class="cover-footer">
+    <div class="cover-footer-info">
+      <strong>Lic. Federico Ayala</strong>
+      Administrador · fayala77@oceandrive.com.uy
+    </div>
+    <div style="color:rgba(255,255,255,.5);font-size:12px">Emitido: 27/05/2026</div>
+  </div>
+</section>
+
+
+<section class="chapter" id="cap1">
+  <div class="ch-header">
+    <span class="ch-num">Sección 1</span>
+    <span class="ch-title">Dashboard Gerencial</span>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec-title">1.1 Datos Financieros</div>
+    
+<div class="kpi-row">
+  <div class="kpi accent">
+  <div class="kpi-lbl">Disponibilidades Totales</div>
+  <div class="kpi-val">USD 594.282</div>
+  <div class="kpi-sub">Rubros 111+112 al Abr</div>
+</div>
+  <div class="kpi ">
+  <div class="kpi-lbl">Fondo de Reserva</div>
+  <div class="kpi-val">USD 130.482</div>
+  <div class="kpi-sub">Rubro 112 / Sub-rubro 10</div>
+</div>
+  <div class="kpi ">
+  <div class="kpi-lbl">Expensas Adelantadas</div>
+  <div class="kpi-val">USD 171.598</div>
+  <div class="kpi-sub">Sección 4</div>
+</div>
+  <div class="kpi good">
+  <div class="kpi-lbl">Disponibilidades Netas</div>
+  <div class="kpi-val">USD 292.202</div>
+  <div class="kpi-sub">Total − Reserva − Adelantadas</div>
+</div>
+</div>
+
+    <div class="sec-title">1.2 Datos Operativos</div>
+    
+<div class="kpi-row">
+  <div class="kpi accent">
+  <div class="kpi-lbl">Funcionarios Activos</div>
+  <div class="kpi-val">42</div>
+  <div class="kpi-sub">Ejercicio al Abril</div>
+</div>
+  <div class="kpi ">
+  <div class="kpi-lbl">Ocupación al Cierre</div>
+  <div class="kpi-val">118%</div>
+  <div class="kpi-sub">Al cierre del período informado</div>
+</div>
+</div>
+
+    <div class="sec-title">1.3 Evolución de Preventivos</div>
+    <div class="prev-grid">
+      <div class="prev-col"><div class="prev-col-hdr">Q1 — Noviembre · Diciembre · Enero</div>
+<div class="prev-card">
+  <div class="prev-card-lbl">Preventivo Q1 Ej. 2026</div>
+  <div class="prev-card-val">$ 28.965.914</div>
+  <div class="prev-card-sub">≈ USD 712.990</div>
+</div><div class="prev-card gasto">
+  <div class="prev-card-lbl">Gasto Real Q1 Ej. 2026</div>
+  <div class="prev-card-val">$ 31.481.978</div>
+  <div class="prev-card-sub">≈ USD 774.922</div>
+  <div class="prev-card-diff"><span class="desvio-pill pill-neg">($ 2.516.064)</span></div>
+</div><div class="prev-card ant">
+  <div class="prev-card-lbl">Preventivo Q1 Ej. 2025</div>
+  <div class="prev-card-val">$ 32.489.805</div>
+  <div class="prev-card-sub">-10.8% vs año anterior</div>
+</div></div>
+<div class="prev-col"><div class="prev-col-hdr">Q2 — Febrero · Marzo · Abril</div>
+<div class="prev-card">
+  <div class="prev-card-lbl">Preventivo Q2 Ej. 2026</div>
+  <div class="prev-card-val">$ 25.487.868</div>
+  <div class="prev-card-sub">≈ USD 627.378</div>
+</div><div class="prev-card gasto">
+  <div class="prev-card-lbl">Gasto Real Q2 Ej. 2026</div>
+  <div class="prev-card-val">$ 23.599.988</div>
+  <div class="prev-card-sub">≈ USD 580.908</div>
+  <div class="prev-card-diff"><span class="desvio-pill pill-pos">+$ 1.887.880</span></div>
+</div><div class="prev-card ant">
+  <div class="prev-card-lbl">Preventivo Q2 Ej. 2025</div>
+  <div class="prev-card-val">$ 32.208.644</div>
+  <div class="prev-card-sub">-20.9% vs año anterior</div>
+</div></div>
+
+    </div>
+
+    <div class="chart-wrap">
+      <h4>Preventivo actual vs año anterior — en USD equivalente</h4>
+      <div class="chart-container"><canvas id="chartPrev"></canvas></div>
+    </div>
+
+    <div class="nota-card">
+  <div class="nota-header">
+    <span class="nota-ref">Q1 — Preventivo vs Gasto Real</span>
+    <span><span class="desvio-pill pill-neg">($ 2.516.064)</span></span>
+  </div>
+  <div class="nota-body">
+    Preventivo del período: <strong>$ 28.965.914</strong>
+    · Gasto real: <strong>$ 31.481.978</strong>
+    · Desvío: <strong>$ 2.516.064</strong> (8.7%) — gasto superior al preventivo.
+  </div>
+</div>
+<div class="nota-card">
+  <div class="nota-header">
+    <span class="nota-ref">Q2 — Preventivo vs Gasto Real</span>
+    <span><span class="desvio-pill pill-pos">+$ 1.887.880</span></span>
+  </div>
+  <div class="nota-body">
+    Preventivo del período: <strong>$ 25.487.868</strong>
+    · Gasto real: <strong>$ 23.599.988</strong>
+    · Desvío: <strong>$ 1.887.880</strong> (7.4%) — resultado favorable.
+  </div>
+</div>
+
+  </div>
+</section>
+
+<section class="chapter" id="cap2">
+  <div class="ch-header">
+    <span class="ch-num">Sección 2</span>
+    <span class="ch-title">Balance</span>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec-title">2.1 Resultados Acumulados del Período</div>
+    <div class="kpi-row">
+  <div class="kpi accent">
+    <div class="kpi-lbl">Total Ingresos Acumulados</div>
+    <div class="kpi-val">55.687.483</div>
+    <div class="kpi-sub">≈ USD 1.370.735</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-lbl">Total Egresos Acumulados</div>
+    <div class="kpi-val">55.081.965</div>
+    <div class="kpi-sub">≈ USD 1.355.830</div>
+  </div>
+  <div class="kpi good">
+    <div class="kpi-lbl">Resultado del Período</div>
+    <div class="kpi-val pos">605.518</div>
+    <div class="kpi-sub">≈ USD 14.905</div>
+  </div>
+</div>
+
+    <div class="sec-title">2.2 Estado de Situación — Mes a Mes</div>
+    <div class="tbl-wrap"><table class="rpt"><thead><tr>
+  <th style='text-align:left;min-width:80px'>Rubro/Sub.R.</th>
+  <th style='text-align:left;min-width:200px'>Concepto</th>
+  <th style='min-width:78px'>Nov</th>
+  <th style='min-width:78px'>Dic</th>
+  <th style='min-width:78px'>Ene</th>
+  <th style='min-width:78px'>Feb</th>
+  <th style='min-width:78px'>Mar</th>
+  <th style='min-width:78px'>Abr</th>
+  <th style='min-width:78px'>May</th>
+  <th style='min-width:78px'>Ago</th>
+  <th style='min-width:90px'>Total</th>
+</tr></thead><tbody><tr><td colspan="11" style="background:var(--sand);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ocean2)">ACTIVO</td></tr>
+<tr class=""><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">111</td><td style="text-align:left">CAJA</td><td style="text-align:right">105.535</td><td style="text-align:right">(112.799)</td><td style="text-align:right">184.739</td><td style="text-align:right">(73.925)</td><td style="text-align:right">40.257</td><td style="text-align:right">(97.934)</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">45.873</td></tr>
+<tr class=""><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">112</td><td style="text-align:left">BANCOS</td><td style="text-align:right">13.330.047</td><td style="text-align:right">17.442.556</td><td style="text-align:right">(6.550.973)</td><td style="text-align:right">(7.867.179)</td><td style="text-align:right">12.754.335</td><td style="text-align:right">(5.011.375)</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">24.097.411</td></tr>
+<tr class=""><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">113</td><td style="text-align:left">DEUDORES</td><td style="text-align:right">33.078.462</td><td style="text-align:right">(33.922.027)</td><td style="text-align:right">(4.030.353)</td><td style="text-align:right">29.776.685</td><td style="text-align:right">(27.210.078)</td><td style="text-align:right">(2.021.955)</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">(4.329.268)</td></tr>
+<tr class=""><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">114</td><td style="text-align:left">OTROS CREDITOS</td><td style="text-align:right">1.789.103</td><td style="text-align:right">889.663</td><td style="text-align:right">(530.171)</td><td style="text-align:right">(1.370.418)</td><td style="text-align:right">1.000.868</td><td style="text-align:right">(292.428)</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">1.486.619</td></tr>
+<tr class=""><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">199</td><td style="text-align:left">CAMBIO DE MONEDA</td><td style="text-align:right">(2)</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">(2)</td></tr>
+<tr class="row-total"><td></td><td style="font-weight:700;text-align:left">TOTAL ACTIVO</td><td style="text-align:right;font-weight:700;color:inherit">48.303.145</td><td style="text-align:right;font-weight:700;color:inherit">(15.702.607)</td><td style="text-align:right;font-weight:700;color:inherit">(10.926.758)</td><td style="text-align:right;font-weight:700;color:inherit">20.465.164</td><td style="text-align:right;font-weight:700;color:inherit">(13.414.618)</td><td style="text-align:right;font-weight:700;color:inherit">(7.423.692)</td><td style="text-align:right;font-weight:700;color:inherit">—</td><td style="text-align:right;font-weight:700;color:inherit">—</td><td style="text-align:right;font-weight:700;color:inherit">21.300.633</td></tr>
+<tr><td colspan="11" style="background:var(--sand);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ocean2)">PASIVO</td></tr>
+<tr class=""><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">211</td><td style="text-align:left">DEUDAS COMERCIALES</td><td style="text-align:right">(1.242.036)</td><td style="text-align:right">(317.027)</td><td style="text-align:right">(183.603)</td><td style="text-align:right">285.910</td><td style="text-align:right">398.580</td><td style="text-align:right">345.162</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">(713.015)</td></tr>
+<tr class=""><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">213</td><td style="text-align:left">DEUDAS SALARIALES</td><td style="text-align:right">(3.329.742)</td><td style="text-align:right">(2.139.392)</td><td style="text-align:right">(465.727)</td><td style="text-align:right">304.514</td><td style="text-align:right">1.980.691</td><td style="text-align:right">535.893</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">(3.113.763)</td></tr>
+<tr class="row-total"><td></td><td style="font-weight:700;text-align:left">TOTAL PASIVO</td><td style="text-align:right;font-weight:700;color:inherit">(4.571.778)</td><td style="text-align:right;font-weight:700;color:inherit">(2.456.419)</td><td style="text-align:right;font-weight:700;color:inherit">(649.329)</td><td style="text-align:right;font-weight:700;color:inherit">590.424</td><td style="text-align:right;font-weight:700;color:inherit">2.379.270</td><td style="text-align:right;font-weight:700;color:inherit">881.055</td><td style="text-align:right;font-weight:700;color:inherit">—</td><td style="text-align:right;font-weight:700;color:inherit">—</td><td style="text-align:right;font-weight:700;color:inherit">(3.826.778)</td></tr>
+<tr><td colspan="11" style="background:var(--sand);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ocean2)">PATRIMONIO</td></tr>
+<tr class=""><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">311</td><td style="text-align:left">RESULTADOS</td><td style="text-align:right">(16.868.339)</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">(16.868.339)</td></tr>
+<tr class="row-total"><td></td><td style="font-weight:700;text-align:left">TOTAL PATRIMONIO</td><td style="text-align:right;font-weight:700;color:inherit">(16.868.339)</td><td style="text-align:right;font-weight:700;color:inherit">—</td><td style="text-align:right;font-weight:700;color:inherit">—</td><td style="text-align:right;font-weight:700;color:inherit">—</td><td style="text-align:right;font-weight:700;color:inherit">—</td><td style="text-align:right;font-weight:700;color:inherit">—</td><td style="text-align:right;font-weight:700;color:inherit">—</td><td style="text-align:right;font-weight:700;color:inherit">—</td><td style="text-align:right;font-weight:700;color:inherit">(16.868.339)</td></tr>
+</tbody></table></div>
+
+    <div class="sec-title">2.3 Estado de Resultados — Mes a Mes</div>
+    <div class="tbl-wrap"><table class="rpt"><thead><tr>
+  <th style='text-align:left;min-width:80px'>Rubro/Sub.R.</th>
+  <th style='text-align:left;min-width:200px'>Concepto</th>
+  <th style='min-width:78px'>Nov</th>
+  <th style='min-width:78px'>Dic</th>
+  <th style='min-width:78px'>Ene</th>
+  <th style='min-width:78px'>Feb</th>
+  <th style='min-width:78px'>Mar</th>
+  <th style='min-width:78px'>Abr</th>
+  <th style='min-width:90px'>Total</th>
+</tr></thead><tbody><tr><td colspan="9" style="background:var(--sand);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ocean2)">INGRESOS</td></tr>
+<tr onclick="toggleGrp('grp_4_411')"><td colspan="9" style="background:var(--ocean2);color:#fff;font-weight:700;font-size:12px;padding:.4rem .75rem;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;user-select:none;">411 — EXPENSAS COMUNES <span id="ico_grp_4_411" style="float:right;font-size:10px;opacity:.8">▶</span></td></tr>
+<tr class="" data-grp="grp_4_411" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">1</td><td style="padding-left:1.4rem;text-align:left">EXPENSAS COMUNES M/N</td><td style="text-align:right">720</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">(702)</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">18</td></tr>
+<tr class="" data-grp="grp_4_411" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">2</td><td style="padding-left:1.4rem;text-align:left">EXPENSAS COMUNES M/E</td><td style="text-align:right">35.421.920</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">31.905.159</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">67.327.079</td></tr>
+<tr class="" data-grp="grp_4_411" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">3</td><td style="padding-left:1.4rem;text-align:left">BONIFICACIONES OTORGADAS</td><td style="text-align:right">—</td><td style="text-align:right">(6.745.998)</td><td style="text-align:right">(208.927)</td><td style="text-align:right">(55.644)</td><td style="text-align:right">(6.177.547)</td><td style="text-align:right">(384.005)</td><td style="text-align:right;font-weight:700">(13.572.121)</td></tr>
+<tr class="" data-grp="grp_4_411" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">4</td><td style="padding-left:1.4rem;text-align:left">MULTAS Y RECARGOS</td><td style="text-align:right">6.436</td><td style="text-align:right">19.327</td><td style="text-align:right">36.036</td><td style="text-align:right">11.106</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">72.905</td></tr>
+<tr class="" data-grp="grp_4_411" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">6</td><td style="padding-left:1.4rem;text-align:left">CENTRAL TELEFONICA</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">2.184</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">2.184</td></tr>
+<tr class="" data-grp="grp_4_411" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">12</td><td style="padding-left:1.4rem;text-align:left">INTERESES</td><td style="text-align:right">436.400</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">187.317</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">623.717</td></tr>
+<tr data-grp="grp_4_411" style="display:none"><td style="background:var(--sand2);font-weight:700"></td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:left;border-top:1px solid var(--ocean2);padding:.4rem .75rem">Subtotal 411</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">35.865.476</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">(6.726.671)</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">(172.891)</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">32.049.420</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">(6.177.547)</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">(384.005)</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">54.453.782</td></tr>
+<tr onclick="toggleGrp('grp_4_412')"><td colspan="9" style="background:var(--ocean2);color:#fff;font-weight:700;font-size:12px;padding:.4rem .75rem;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;user-select:none;">412 — INGRESOS EXTRAORDINARIOS <span id="ico_grp_4_412" style="float:right;font-size:10px;opacity:.8">▶</span></td></tr>
+<tr class="" data-grp="grp_4_412" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">1</td><td style="padding-left:1.4rem;text-align:left">PARRILLEROS</td><td style="text-align:right">69.150</td><td style="text-align:right">179.350</td><td style="text-align:right">307.515</td><td style="text-align:right">150.900</td><td style="text-align:right">87.396</td><td style="text-align:right">75.730</td><td style="text-align:right;font-weight:700">870.041</td></tr>
+<tr class="" data-grp="grp_4_412" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">3</td><td style="padding-left:1.4rem;text-align:left">CANCHA DE TENIS</td><td style="text-align:right">1.400</td><td style="text-align:right">1.400</td><td style="text-align:right">5.000</td><td style="text-align:right">1.800</td><td style="text-align:right">600</td><td style="text-align:right">1.200</td><td style="text-align:right;font-weight:700">11.400</td></tr>
+<tr class="" data-grp="grp_4_412" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">5</td><td style="padding-left:1.4rem;text-align:left">TAGS LLAVE ESPACIOS</td><td style="text-align:right">1.000</td><td style="text-align:right">8.200</td><td style="text-align:right">4.750</td><td style="text-align:right">2.750</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">16.700</td></tr>
+<tr class="" data-grp="grp_4_412" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">6</td><td style="padding-left:1.4rem;text-align:left">TARJETAS DE PLAYA</td><td style="text-align:right">—</td><td style="text-align:right">1.800</td><td style="text-align:right">1.600</td><td style="text-align:right">2.300</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">5.700</td></tr>
+<tr class="" data-grp="grp_4_412" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">7</td><td style="padding-left:1.4rem;text-align:left">ROTURAS PARRILLEROS</td><td style="text-align:right">215</td><td style="text-align:right">695</td><td style="text-align:right">1.770</td><td style="text-align:right">1.495</td><td style="text-align:right">35</td><td style="text-align:right">1.260</td><td style="text-align:right;font-weight:700">5.470</td></tr>
+<tr class="" data-grp="grp_4_412" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">9</td><td style="padding-left:1.4rem;text-align:left">VARIOS</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">200.056</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">200.056</td></tr>
+<tr class="" data-grp="grp_4_412" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">13</td><td style="padding-left:1.4rem;text-align:left">Ingresos Parrilleros por tarjetas</td><td style="text-align:right">33.942</td><td style="text-align:right">54.436</td><td style="text-align:right">170.598</td><td style="text-align:right">93.970</td><td style="text-align:right">22.998</td><td style="text-align:right">31.859</td><td style="text-align:right;font-weight:700">407.803</td></tr>
+<tr data-grp="grp_4_412" style="display:none"><td style="background:var(--sand2);font-weight:700"></td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:left;border-top:1px solid var(--ocean2);padding:.4rem .75rem">Subtotal 412</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">105.707</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">245.881</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">691.289</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">253.215</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">111.029</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">110.049</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">1.517.170</td></tr>
+<tr onclick="toggleGrp('grp_4_432')"><td colspan="9" style="background:var(--ocean2);color:#fff;font-weight:700;font-size:12px;padding:.4rem .75rem;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;user-select:none;">432 — DIFERENCIA DE CAMBIO <span id="ico_grp_4_432" style="float:right;font-size:10px;opacity:.8">▶</span></td></tr>
+<tr class="" data-grp="grp_4_432" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">1</td><td style="padding-left:1.4rem;text-align:left">DIFERENCIA DE CAMBIO</td><td style="text-align:right">(828.247)</td><td style="text-align:right">(257.070)</td><td style="text-align:right">(313.580)</td><td style="text-align:right">(497.844)</td><td style="text-align:right">1.760.323</td><td style="text-align:right">(147.050)</td><td style="text-align:right;font-weight:700">(283.469)</td></tr>
+<tr data-grp="grp_4_432" style="display:none"><td style="background:var(--sand2);font-weight:700"></td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:left;border-top:1px solid var(--ocean2);padding:.4rem .75rem">Subtotal 432</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">(828.247)</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">(257.070)</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">(313.580)</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">(497.844)</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">1.760.323</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">(147.050)</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">(283.469)</td></tr>
+<tr class="row-total"><td></td><td style="font-weight:700;text-align:left">TOTAL INGRESOS</td><td style="text-align:right;font-weight:700;color:inherit">35.142.936</td><td style="text-align:right;font-weight:700;color:inherit">(6.737.860)</td><td style="text-align:right;font-weight:700;color:inherit">204.817</td><td style="text-align:right;font-weight:700;color:inherit">31.804.792</td><td style="text-align:right;font-weight:700;color:inherit">(4.306.195)</td><td style="text-align:right;font-weight:700;color:inherit">(421.007)</td><td style="text-align:right;font-weight:700;color:inherit">55.687.483</td></tr>
+<tr><td colspan="9" style="background:var(--sand);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ocean2)">EGRESOS</td></tr>
+<tr onclick="toggleGrp('grp_5_511')"><td colspan="9" style="background:var(--ocean2);color:#fff;font-weight:700;font-size:12px;padding:.4rem .75rem;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;user-select:none;">511 — PERSONAL <span id="ico_grp_5_511" style="float:right;font-size:10px;opacity:.8">▶</span></td></tr>
+<tr class="" data-grp="grp_5_511" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">1</td><td style="padding-left:1.4rem;text-align:left">SUELDOS</td><td style="text-align:right">2.410.388</td><td style="text-align:right">3.434.946</td><td style="text-align:right">4.135.611</td><td style="text-align:right">6.018.981</td><td style="text-align:right">4.183.720</td><td style="text-align:right">3.348.676</td><td style="text-align:right;font-weight:700">23.532.322</td></tr>
+<tr class="" data-grp="grp_5_511" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">2</td><td style="padding-left:1.4rem;text-align:left">AGUINALDOS</td><td style="text-align:right">—</td><td style="text-align:right">1.273.937</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">1.273.937</td></tr>
+<tr class="" data-grp="grp_5_511" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">3</td><td style="padding-left:1.4rem;text-align:left">SALARIO VACACIONAL</td><td style="text-align:right">158.449</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">98.541</td><td style="text-align:right">363.298</td><td style="text-align:right">288.236</td><td style="text-align:right;font-weight:700">908.524</td></tr>
+<tr class="" data-grp="grp_5_511" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">4</td><td style="padding-left:1.4rem;text-align:left">BSE</td><td style="text-align:right">72.085</td><td style="text-align:right">71.839</td><td style="text-align:right">133.669</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">277.593</td></tr>
+<tr class="" data-grp="grp_5_511" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">12</td><td style="padding-left:1.4rem;text-align:left">CANASTA PERSONAL</td><td style="text-align:right">—</td><td style="text-align:right">117.250</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">117.250</td></tr>
+<tr class="" data-grp="grp_5_511" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">13</td><td style="padding-left:1.4rem;text-align:left">UNIFORMES PERSONAL</td><td style="text-align:right">—</td><td style="text-align:right">430.680</td><td style="text-align:right">5.290</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">2.790</td><td style="text-align:right;font-weight:700">438.760</td></tr>
+<tr class="" data-grp="grp_5_511" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">14</td><td style="padding-left:1.4rem;text-align:left">BPS</td><td style="text-align:right">1.125.384</td><td style="text-align:right">2.004.419</td><td style="text-align:right">1.822.648</td><td style="text-align:right">423.139</td><td style="text-align:right">293.943</td><td style="text-align:right">260.315</td><td style="text-align:right;font-weight:700">5.929.848</td></tr>
+<tr class="" data-grp="grp_5_511" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">15</td><td style="padding-left:1.4rem;text-align:left">IRPF</td><td style="text-align:right">161.041</td><td style="text-align:right">135.921</td><td style="text-align:right">176.544</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">473.506</td></tr>
+<tr class="" data-grp="grp_5_511" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">16</td><td style="padding-left:1.4rem;text-align:left">ANDA</td><td style="text-align:right">71.020</td><td style="text-align:right">70.824</td><td style="text-align:right">63.541</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">205.385</td></tr>
+<tr class="" data-grp="grp_5_511" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">17</td><td style="padding-left:1.4rem;text-align:left">RETENCION JUDICIAL</td><td style="text-align:right">61.163</td><td style="text-align:right">85.023</td><td style="text-align:right">55.518</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">201.703</td></tr>
+<tr data-grp="grp_5_511" style="display:none"><td style="background:var(--sand2);font-weight:700"></td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:left;border-top:1px solid var(--ocean2);padding:.4rem .75rem">Subtotal 511</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">4.059.530</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">7.624.839</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">6.392.821</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">6.540.661</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">4.840.961</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">3.900.017</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">33.358.828</td></tr>
+<tr onclick="toggleGrp('grp_5_512')"><td colspan="9" style="background:var(--ocean2);color:#fff;font-weight:700;font-size:12px;padding:.4rem .75rem;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;user-select:none;">512 — SERVICIOS <span id="ico_grp_5_512" style="float:right;font-size:10px;opacity:.8">▶</span></td></tr>
+<tr class="" data-grp="grp_5_512" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">1</td><td style="padding-left:1.4rem;text-align:left">UTE</td><td style="text-align:right">479.682</td><td style="text-align:right">451.309</td><td style="text-align:right">564.384</td><td style="text-align:right">717.604</td><td style="text-align:right">624.515</td><td style="text-align:right">560.882</td><td style="text-align:right;font-weight:700">3.398.376</td></tr>
+<tr class="" data-grp="grp_5_512" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">2</td><td style="padding-left:1.4rem;text-align:left">OSE</td><td style="text-align:right">407.008</td><td style="text-align:right">419.386</td><td style="text-align:right">784.742</td><td style="text-align:right">1.291.444</td><td style="text-align:right">935.598</td><td style="text-align:right">476.105</td><td style="text-align:right;font-weight:700">4.314.284</td></tr>
+<tr class="" data-grp="grp_5_512" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">3</td><td style="padding-left:1.4rem;text-align:left">ANTEL</td><td style="text-align:right">24.595</td><td style="text-align:right">24.248</td><td style="text-align:right">26.354</td><td style="text-align:right">26.311</td><td style="text-align:right">26.056</td><td style="text-align:right">24.322</td><td style="text-align:right;font-weight:700">151.886</td></tr>
+<tr class="" data-grp="grp_5_512" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">6</td><td style="padding-left:1.4rem;text-align:left">IMP, HABILITACION ASCENSORES</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">203.963</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">203.963</td></tr>
+<tr class="" data-grp="grp_5_512" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">7</td><td style="padding-left:1.4rem;text-align:left">PATENTE VEHICULOS</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">13.100</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">13.100</td></tr>
+<tr class="" data-grp="grp_5_512" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">8</td><td style="padding-left:1.4rem;text-align:left">MOVISTAR</td><td style="text-align:right">6.013</td><td style="text-align:right">6.013</td><td style="text-align:right">6.013</td><td style="text-align:right">6.283</td><td style="text-align:right">6.473</td><td style="text-align:right">6.281</td><td style="text-align:right;font-weight:700">37.076</td></tr>
+<tr data-grp="grp_5_512" style="display:none"><td style="background:var(--sand2);font-weight:700"></td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:left;border-top:1px solid var(--ocean2);padding:.4rem .75rem">Subtotal 512</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">917.298</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">900.956</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">1.598.556</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">2.041.642</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">1.592.642</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">1.067.590</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">8.118.686</td></tr>
+<tr onclick="toggleGrp('grp_5_514')"><td colspan="9" style="background:var(--ocean2);color:#fff;font-weight:700;font-size:12px;padding:.4rem .75rem;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;user-select:none;">514 — GASTOS OPERATIVOS <span id="ico_grp_5_514" style="float:right;font-size:10px;opacity:.8">▶</span></td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">3</td><td style="padding-left:1.4rem;text-align:left">SANITARIA</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">142.363</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">142.363</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">4</td><td style="padding-left:1.4rem;text-align:left">PINTURERIA</td><td style="text-align:right">91.624</td><td style="text-align:right">38.131</td><td style="text-align:right">2.133</td><td style="text-align:right">45.807</td><td style="text-align:right">10.929</td><td style="text-align:right">6.760</td><td style="text-align:right;font-weight:700">195.384</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">5</td><td style="padding-left:1.4rem;text-align:left">CERRAJERIA</td><td style="text-align:right">7.880</td><td style="text-align:right">11.190</td><td style="text-align:right">22.940</td><td style="text-align:right">9.390</td><td style="text-align:right">2.000</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">53.400</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">7</td><td style="padding-left:1.4rem;text-align:left">PISCINA</td><td style="text-align:right">7.809</td><td style="text-align:right">28.257</td><td style="text-align:right">21.971</td><td style="text-align:right">29.873</td><td style="text-align:right">11.513</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">99.423</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">8</td><td style="padding-left:1.4rem;text-align:left">LAMPARAS TUBOS Y AFINES</td><td style="text-align:right">22.553</td><td style="text-align:right">6.562</td><td style="text-align:right">7.451</td><td style="text-align:right">14.804</td><td style="text-align:right">10.320</td><td style="text-align:right">10.242</td><td style="text-align:right;font-weight:700">71.932</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">9</td><td style="padding-left:1.4rem;text-align:left">JARDIN</td><td style="text-align:right">97.803</td><td style="text-align:right">97.803</td><td style="text-align:right">101.421</td><td style="text-align:right">101.421</td><td style="text-align:right">101.421</td><td style="text-align:right">101.421</td><td style="text-align:right;font-weight:700">601.290</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">10</td><td style="padding-left:1.4rem;text-align:left">ASCENSORES</td><td style="text-align:right">268.568</td><td style="text-align:right">524.682</td><td style="text-align:right">337.478</td><td style="text-align:right">407.795</td><td style="text-align:right">396.259</td><td style="text-align:right">294.948</td><td style="text-align:right;font-weight:700">2.229.730</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">11</td><td style="padding-left:1.4rem;text-align:left">VIDRIERIA</td><td style="text-align:right">11.138</td><td style="text-align:right">—</td><td style="text-align:right">22.660</td><td style="text-align:right">(8.090)</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">25.708</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">13</td><td style="padding-left:1.4rem;text-align:left">FERRETERIA</td><td style="text-align:right">110.613</td><td style="text-align:right">64.364</td><td style="text-align:right">65.807</td><td style="text-align:right">31.082</td><td style="text-align:right">22.952</td><td style="text-align:right">34.633</td><td style="text-align:right;font-weight:700">329.451</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">14</td><td style="padding-left:1.4rem;text-align:left">LIMPIEZA VIDRIOS</td><td style="text-align:right">32.940</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">32.940</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">15</td><td style="padding-left:1.4rem;text-align:left">PRODUCTOS DE LIMPIEZA</td><td style="text-align:right">53.358</td><td style="text-align:right">132.821</td><td style="text-align:right">123.004</td><td style="text-align:right">92.862</td><td style="text-align:right">52.163</td><td style="text-align:right">46.113</td><td style="text-align:right;font-weight:700">500.322</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">18</td><td style="padding-left:1.4rem;text-align:left">COMBUSTIBLE</td><td style="text-align:right">5.000</td><td style="text-align:right">6.000</td><td style="text-align:right">7.003</td><td style="text-align:right">5.001</td><td style="text-align:right">4.000</td><td style="text-align:right">2.000</td><td style="text-align:right;font-weight:700">29.004</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">19</td><td style="padding-left:1.4rem;text-align:left">HONORARIOS PROFESIONALES</td><td style="text-align:right">46.048</td><td style="text-align:right">48.928</td><td style="text-align:right">44.022</td><td style="text-align:right">108.810</td><td style="text-align:right">47.102</td><td style="text-align:right">46.618</td><td style="text-align:right;font-weight:700">341.529</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">20</td><td style="padding-left:1.4rem;text-align:left">CANCHA DE TENIS</td><td style="text-align:right">33.977</td><td style="text-align:right">50.965</td><td style="text-align:right">74.754</td><td style="text-align:right">74.754</td><td style="text-align:right">37.210</td><td style="text-align:right">41.961</td><td style="text-align:right;font-weight:700">313.621</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">21</td><td style="padding-left:1.4rem;text-align:left">CENTRAL TELEFONICA</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">10.635</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">10.635</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">23</td><td style="padding-left:1.4rem;text-align:left">MATERIALES DE RECREACION</td><td style="text-align:right">—</td><td style="text-align:right">53.687</td><td style="text-align:right">8.521</td><td style="text-align:right">14.956</td><td style="text-align:right">—</td><td style="text-align:right">9.910</td><td style="text-align:right;font-weight:700">87.074</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">27</td><td style="padding-left:1.4rem;text-align:left">RIEGOS</td><td style="text-align:right">—</td><td style="text-align:right">44.000</td><td style="text-align:right">35.757</td><td style="text-align:right">55.055</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">134.812</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">28</td><td style="padding-left:1.4rem;text-align:left">AROMATIZADORES</td><td style="text-align:right">17.873</td><td style="text-align:right">—</td><td style="text-align:right">17.763</td><td style="text-align:right">18.934</td><td style="text-align:right">18.934</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">73.504</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">29</td><td style="padding-left:1.4rem;text-align:left">ALARMA</td><td style="text-align:right">40.058</td><td style="text-align:right">64.832</td><td style="text-align:right">40.471</td><td style="text-align:right">40.471</td><td style="text-align:right">192.220</td><td style="text-align:right">40.471</td><td style="text-align:right;font-weight:700">418.524</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">30</td><td style="padding-left:1.4rem;text-align:left">PAPELERIA</td><td style="text-align:right">—</td><td style="text-align:right">6.909</td><td style="text-align:right">2.293</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">785</td><td style="text-align:right;font-weight:700">9.987</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">31</td><td style="padding-left:1.4rem;text-align:left">MANT, PROSIS</td><td style="text-align:right">3.843</td><td style="text-align:right">—</td><td style="text-align:right">42.690</td><td style="text-align:right">3.891</td><td style="text-align:right">9.739</td><td style="text-align:right">11.512</td><td style="text-align:right;font-weight:700">71.675</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">33</td><td style="padding-left:1.4rem;text-align:left">FLETE</td><td style="text-align:right">1.972</td><td style="text-align:right">285</td><td style="text-align:right">1.430</td><td style="text-align:right">330</td><td style="text-align:right">240</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">4.257</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">34</td><td style="padding-left:1.4rem;text-align:left">AGUA MINERAL</td><td style="text-align:right">17.936</td><td style="text-align:right">46.522</td><td style="text-align:right">57.171</td><td style="text-align:right">54.369</td><td style="text-align:right">31.388</td><td style="text-align:right">3.414</td><td style="text-align:right;font-weight:700">210.801</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">35</td><td style="padding-left:1.4rem;text-align:left">URSEC</td><td style="text-align:right">936</td><td style="text-align:right">936</td><td style="text-align:right">936</td><td style="text-align:right">993</td><td style="text-align:right">993</td><td style="text-align:right">993</td><td style="text-align:right;font-weight:700">5.787</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">36</td><td style="padding-left:1.4rem;text-align:left">LAVADERO</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">3.068</td><td style="text-align:right">2.500</td><td style="text-align:right">4.432</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">10.000</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">37</td><td style="padding-left:1.4rem;text-align:left">HONORARIOS DE PLAYA</td><td style="text-align:right">—</td><td style="text-align:right">103.045</td><td style="text-align:right">162.187</td><td style="text-align:right">169.466</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">434.698</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">38</td><td style="padding-left:1.4rem;text-align:left">MANT, RELOJ</td><td style="text-align:right">2.340</td><td style="text-align:right">2.340</td><td style="text-align:right">2.361</td><td style="text-align:right">2.361</td><td style="text-align:right">2.361</td><td style="text-align:right">2.361</td><td style="text-align:right;font-weight:700">14.124</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">39</td><td style="padding-left:1.4rem;text-align:left">TV CABLE</td><td style="text-align:right">14.123</td><td style="text-align:right">14.539</td><td style="text-align:right">14.664</td><td style="text-align:right">14.539</td><td style="text-align:right">14.539</td><td style="text-align:right">14.539</td><td style="text-align:right;font-weight:700">86.943</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">40</td><td style="padding-left:1.4rem;text-align:left">MANT, GENERAL</td><td style="text-align:right">429.309</td><td style="text-align:right">640.358</td><td style="text-align:right">236.896</td><td style="text-align:right">167.932</td><td style="text-align:right">90.175</td><td style="text-align:right">221.639</td><td style="text-align:right;font-weight:700">1.786.310</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">41</td><td style="padding-left:1.4rem;text-align:left">COBERTURA MEDICA</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">149.975</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">149.975</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">42</td><td style="padding-left:1.4rem;text-align:left">SILLAS Y SOMBRILLAS</td><td style="text-align:right">545.740</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">545.740</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">44</td><td style="padding-left:1.4rem;text-align:left">FUMIGACION</td><td style="text-align:right">—</td><td style="text-align:right">4.026</td><td style="text-align:right">18.056</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">22.082</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">45</td><td style="padding-left:1.4rem;text-align:left">ART, INFORMATICA</td><td style="text-align:right">4.654</td><td style="text-align:right">—</td><td style="text-align:right">8.760</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">13.414</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">46</td><td style="padding-left:1.4rem;text-align:left">BAROMETRICA</td><td style="text-align:right">—</td><td style="text-align:right">68.320</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">68.320</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">48</td><td style="padding-left:1.4rem;text-align:left">EXTINTORES</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">2.708</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">2.708</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">49</td><td style="padding-left:1.4rem;text-align:left">CARTELERIA / LIBRETAS</td><td style="text-align:right">4.148</td><td style="text-align:right">—</td><td style="text-align:right">46.970</td><td style="text-align:right">—</td><td style="text-align:right">2.196</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">53.314</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">50</td><td style="padding-left:1.4rem;text-align:left">VEHICULOS</td><td style="text-align:right">—</td><td style="text-align:right">10.380</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">10.380</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">52</td><td style="padding-left:1.4rem;text-align:left">FARMACIA</td><td style="text-align:right">—</td><td style="text-align:right">4.666</td><td style="text-align:right">1.783</td><td style="text-align:right">7.213</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">13.662</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">54</td><td style="padding-left:1.4rem;text-align:left">MANT, REDES Y CAMARAS</td><td style="text-align:right">25.934</td><td style="text-align:right">25.934</td><td style="text-align:right">26.843</td><td style="text-align:right">26.843</td><td style="text-align:right">26.843</td><td style="text-align:right">26.843</td><td style="text-align:right;font-weight:700">159.240</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">55</td><td style="padding-left:1.4rem;text-align:left">AUDITORIA</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">61.000</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">61.000</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">58</td><td style="padding-left:1.4rem;text-align:left">MANT, APP ACCESOS</td><td style="text-align:right">12.140</td><td style="text-align:right">12.006</td><td style="text-align:right">11.684</td><td style="text-align:right">11.566</td><td style="text-align:right">12.300</td><td style="text-align:right">12.390</td><td style="text-align:right;font-weight:700">72.086</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">60</td><td style="padding-left:1.4rem;text-align:left">ARREGLOS DE TAPICERIA</td><td style="text-align:right">65.800</td><td style="text-align:right">11.800</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">77.600</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">92</td><td style="padding-left:1.4rem;text-align:left">MANT, EQUIPOS GIMNASIO</td><td style="text-align:right">6.500</td><td style="text-align:right">6.500</td><td style="text-align:right">6.500</td><td style="text-align:right">6.500</td><td style="text-align:right">6.500</td><td style="text-align:right">6.500</td><td style="text-align:right;font-weight:700">39.000</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">93</td><td style="padding-left:1.4rem;text-align:left">HONORARIOS RECREACION</td><td style="text-align:right">—</td><td style="text-align:right">165.733</td><td style="text-align:right">198.651</td><td style="text-align:right">218.986</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">583.370</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">94</td><td style="padding-left:1.4rem;text-align:left">GENERADOR</td><td style="text-align:right">3.482</td><td style="text-align:right">138.032</td><td style="text-align:right">3.512</td><td style="text-align:right">3.512</td><td style="text-align:right">3.512</td><td style="text-align:right">3.512</td><td style="text-align:right;font-weight:700">155.562</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">95</td><td style="padding-left:1.4rem;text-align:left">HONORARIOS ADMINISTRACION</td><td style="text-align:right">155.916</td><td style="text-align:right">155.916</td><td style="text-align:right">161.607</td><td style="text-align:right">161.607</td><td style="text-align:right">161.607</td><td style="text-align:right">161.607</td><td style="text-align:right;font-weight:700">958.261</td></tr>
+<tr class="" data-grp="grp_5_514" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">99</td><td style="padding-left:1.4rem;text-align:left">VARIOS</td><td style="text-align:right">10.752</td><td style="text-align:right">36.033</td><td style="text-align:right">70.609</td><td style="text-align:right">36.796</td><td style="text-align:right">3.788</td><td style="text-align:right">10.447</td><td style="text-align:right;font-weight:700">168.425</td></tr>
+<tr data-grp="grp_5_514" style="display:none"><td style="background:var(--sand2);font-weight:700"></td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:left;border-top:1px solid var(--ocean2);padding:.4rem .75rem">Subtotal 514</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">2.152.768</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">2.626.503</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">2.236.147</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">1.932.328</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">1.420.000</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">1.111.621</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">11.479.366</td></tr>
+<tr onclick="toggleGrp('grp_5_516')"><td colspan="9" style="background:var(--ocean2);color:#fff;font-weight:700;font-size:12px;padding:.4rem .75rem;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;user-select:none;">516 — PARRILLERO <span id="ico_grp_5_516" style="float:right;font-size:10px;opacity:.8">▶</span></td></tr>
+<tr class="" data-grp="grp_5_516" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">25</td><td style="padding-left:1.4rem;text-align:left">INSUMOS PARRILLEROS</td><td style="text-align:right">29.326</td><td style="text-align:right">156</td><td style="text-align:right">44.132</td><td style="text-align:right">12.317</td><td style="text-align:right">4.287</td><td style="text-align:right">4.192</td><td style="text-align:right;font-weight:700">94.410</td></tr>
+<tr class="" data-grp="grp_5_516" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">26</td><td style="padding-left:1.4rem;text-align:left">LEÑA</td><td style="text-align:right">27.860</td><td style="text-align:right">55.200</td><td style="text-align:right">138.280</td><td style="text-align:right">78.600</td><td style="text-align:right">31.000</td><td style="text-align:right">31.000</td><td style="text-align:right;font-weight:700">361.940</td></tr>
+<tr data-grp="grp_5_516" style="display:none"><td style="background:var(--sand2);font-weight:700"></td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:left;border-top:1px solid var(--ocean2);padding:.4rem .75rem">Subtotal 516</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">57.186</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">55.356</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">182.412</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">90.917</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">35.287</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">35.192</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">456.350</td></tr>
+<tr onclick="toggleGrp('grp_5_517')"><td colspan="9" style="background:var(--ocean2);color:#fff;font-weight:700;font-size:12px;padding:.4rem .75rem;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;user-select:none;">517 — ARREGLOS DE OBRA <span id="ico_grp_5_517" style="float:right;font-size:10px;opacity:.8">▶</span></td></tr>
+<tr class="" data-grp="grp_5_517" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">1</td><td style="padding-left:1.4rem;text-align:left">ARREGLOS DE OBRA $</td><td style="text-align:right">639.879</td><td style="text-align:right">15.094</td><td style="text-align:right">1.139.472</td><td style="text-align:right">8.858</td><td style="text-align:right">—</td><td style="text-align:right">270</td><td style="text-align:right;font-weight:700">1.803.573</td></tr>
+<tr class="" data-grp="grp_5_517" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">2</td><td style="padding-left:1.4rem;text-align:left">ARREGLOS DE OBRA USD</td><td style="text-align:right">446.725</td><td style="text-align:right">189.213</td><td style="text-align:right">217.339</td><td style="text-align:right">125.494</td><td style="text-align:right">(1.171.546)</td><td style="text-align:right">—</td><td style="text-align:right;font-weight:700">(192.775)</td></tr>
+<tr data-grp="grp_5_517" style="display:none"><td style="background:var(--sand2);font-weight:700"></td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:left;border-top:1px solid var(--ocean2);padding:.4rem .75rem">Subtotal 517</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">1.086.604</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">204.307</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">1.356.811</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">134.352</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">(1.171.546)</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">270</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">1.610.798</td></tr>
+<tr onclick="toggleGrp('grp_5_518')"><td colspan="9" style="background:var(--ocean2);color:#fff;font-weight:700;font-size:12px;padding:.4rem .75rem;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;user-select:none;">518 — GASTOS BANCARIOS <span id="ico_grp_5_518" style="float:right;font-size:10px;opacity:.8">▶</span></td></tr>
+<tr class="" data-grp="grp_5_518" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">1</td><td style="padding-left:1.4rem;text-align:left">GASTOS BANCARIOS $</td><td style="text-align:right">4.099</td><td style="text-align:right">3.900</td><td style="text-align:right">6.764</td><td style="text-align:right">5.591</td><td style="text-align:right">5.124</td><td style="text-align:right">3.773</td><td style="text-align:right;font-weight:700">29.251</td></tr>
+<tr class="" data-grp="grp_5_518" style="display:none"><td style="text-align:left;font-size:11px;color:var(--muted);white-space:nowrap">2</td><td style="padding-left:1.4rem;text-align:left">GASTOS BANCARIOS USD</td><td style="text-align:right">2.423</td><td style="text-align:right">5.305</td><td style="text-align:right">7.392</td><td style="text-align:right">3.714</td><td style="text-align:right">6.685</td><td style="text-align:right">3.167</td><td style="text-align:right;font-weight:700">28.687</td></tr>
+<tr data-grp="grp_5_518" style="display:none"><td style="background:var(--sand2);font-weight:700"></td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:left;border-top:1px solid var(--ocean2);padding:.4rem .75rem">Subtotal 518</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">6.522</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">9.205</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">14.157</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">9.305</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">11.809</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">6.940</td><td style="background:var(--sand2);color:var(--ocean1);font-weight:700;text-align:right;border-top:1px solid var(--ocean2)">57.938</td></tr>
+<tr class="row-total"><td></td><td style="font-weight:700;text-align:left">TOTAL EGRESOS</td><td style="text-align:right;font-weight:700;color:inherit">8.279.908</td><td style="text-align:right;font-weight:700;color:inherit">11.421.166</td><td style="text-align:right;font-weight:700;color:inherit">11.780.904</td><td style="text-align:right;font-weight:700;color:inherit">10.749.204</td><td style="text-align:right;font-weight:700;color:inherit">6.729.152</td><td style="text-align:right;font-weight:700;color:inherit">6.121.631</td><td style="text-align:right;font-weight:700;color:inherit">55.081.965</td></tr>
+<tr class="row-result"><td></td><td style="font-weight:700;text-align:left">RESULTADO OPERATIVO</td><td style="text-align:right;font-weight:700;color:#fff">26.863.028</td><td style="text-align:right;font-weight:700;color:#fff">(18.159.026)</td><td style="text-align:right;font-weight:700;color:#fff">(11.576.086)</td><td style="text-align:right;font-weight:700;color:#fff">21.055.587</td><td style="text-align:right;font-weight:700;color:#fff">(11.035.347)</td><td style="text-align:right;font-weight:700;color:#fff">(6.542.637)</td><td style="text-align:right;font-weight:700;color:#fff">605.518</td></tr>
+</tbody></table></div>
+
+  </div>
+</section>
+
+<section class="chapter" id="cap3" style="margin-bottom:1.5rem">
+  <div class="ch-header">
+    <span class="ch-num">Sección 3</span>
+    <span class="ch-title">Estructura de Costos</span>
+  </div>
+  <div class="ch-body">
+    <div style="margin-bottom:1rem">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;
+                  letter-spacing:.06em;font-weight:700">Total egresos acumulados al 30/04/2026</div>
+      <div style="font-size:1.4rem;font-weight:800;color:var(--ocean1)">55.081.965</div>
+      <div style="font-size:13px;color:var(--muted)">USD 1.355.830</div>
+    </div>
+    <div style="position:relative;height:380px">
+      <canvas id="chartCostos"></canvas>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="cap4">
+  <div class="ch-header">
+    <span class="ch-num">Sección 4</span>
+    <span class="ch-title">Deudores por Expensas — Cierre Abril 2026</span>
+  </div>
+  <div class="ch-body">
+    
+    <div class="kpi-row">
+      <div class="kpi bad">
+        <div class="kpi-lbl">Deudores por Expensas</div>
+        <div class="kpi-val neg">USD 62.834</div>
+        <div class="kpi-sub">58 unidades con saldo deudor</div>
+      </div>
+      <div class="kpi good">
+        <div class="kpi-lbl">Expensas Adelantadas</div>
+        <div class="kpi-val pos">USD 171.598</div>
+        <div class="kpi-sub">68 unidades con saldo acreedor</div>
+      </div>
+    </div>
+
+    <div class="sec-title">4.2 Saldos Deudores por Unidad — 30/04/2026</div>
+    
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start">
+  <div class="tbl-wrap"><table class="rpt"><thead><tr><th style="text-align:left">Unidad</th><th style="text-align:left">Torre</th><th style="text-align:right">Saldo USD</th></tr></thead><tbody><tr><td>1406</td><td>T1</td><td style="text-align:right">USD 22.810</td></tr>
+<tr><td>1508</td><td>T1</td><td style="text-align:right">USD 6.208</td></tr>
+<tr><td>1705</td><td>T1</td><td style="text-align:right">USD 4.371</td></tr>
+<tr><td>301</td><td>T1</td><td style="text-align:right">USD 4.111</td></tr>
+<tr><td>902</td><td>T2</td><td style="text-align:right">USD 3.311</td></tr>
+<tr><td>906</td><td>T2</td><td style="text-align:right">USD 2.436</td></tr>
+<tr><td>1305</td><td>T2</td><td style="text-align:right">USD 2.428</td></tr>
+<tr><td>1405</td><td>T2</td><td style="text-align:right">USD 2.423</td></tr>
+</tbody></table></div>
+  <div class="tbl-wrap"><table class="rpt"><thead><tr><th style="text-align:left">Unidad</th><th style="text-align:left">Torre</th><th style="text-align:right">Saldo USD</th></tr></thead><tbody><tr><td>1203</td><td>T2</td><td style="text-align:right">USD 2.385</td></tr>
+<tr><td>1803</td><td>T2</td><td style="text-align:right">USD 2.056</td></tr>
+<tr><td>1507</td><td>T1</td><td style="text-align:right">USD 2.022</td></tr>
+<tr><td>1207</td><td>T1</td><td style="text-align:right">USD 1.980</td></tr>
+<tr><td>409</td><td>T2</td><td style="text-align:right">USD 1.519</td></tr>
+<tr><td>510</td><td>T2</td><td style="text-align:right">USD 1.194</td></tr>
+<tr><td>—</td><td style="color:var(--muted);font-style:italic">Otros menores</td><td style="text-align:right">USD 3.580</td></tr>
+<tr class="row-total"><td colspan="2">TOTAL DEUDORES</td><td style="text-align:right">USD 62.834</td></tr>
+</tbody></table></div>
+</div>
+
+    <div class="sec-title">4.3 Saldos con Expensas Adelantadas — 30/04/2026</div>
+    
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start">
+  <div class="tbl-wrap"><table class="rpt"><thead><tr><th style="text-align:left">Unidad</th><th style="text-align:left">Torre</th><th style="text-align:right">Saldo USD</th></tr></thead><tbody><tr><td>2305</td><td>T1</td><td style="text-align:right">USD 8.667</td></tr>
+<tr><td>1301</td><td>T2</td><td style="text-align:right">USD 8.406</td></tr>
+<tr><td>502</td><td>T1</td><td style="text-align:right">USD 8.179</td></tr>
+<tr><td>1601</td><td>T2</td><td style="text-align:right">USD 8.128</td></tr>
+<tr><td>1001</td><td>T2</td><td style="text-align:right">USD 8.062</td></tr>
+<tr><td>2104</td><td>T2</td><td style="text-align:right">USD 7.449</td></tr>
+<tr><td>1307</td><td>T1</td><td style="text-align:right">USD 6.378</td></tr>
+<tr><td>303</td><td>T2</td><td style="text-align:right">USD 6.288</td></tr>
+<tr><td>1805</td><td>T2</td><td style="text-align:right">USD 6.218</td></tr>
+<tr><td>1907</td><td>T2</td><td style="text-align:right">USD 6.044</td></tr>
+<tr><td>308</td><td>T2</td><td style="text-align:right">USD 5.011</td></tr>
+<tr><td>1105</td><td>T1</td><td style="text-align:right">USD 4.954</td></tr>
+<tr><td>705</td><td>T1</td><td style="text-align:right">USD 4.940</td></tr>
+<tr><td>707</td><td>T1</td><td style="text-align:right">USD 4.803</td></tr>
+<tr><td>1102</td><td>T2</td><td style="text-align:right">USD 4.486</td></tr>
+<tr><td>105</td><td>T1</td><td style="text-align:right">USD 4.446</td></tr>
+<tr><td>1303</td><td>T2</td><td style="text-align:right">USD 4.086</td></tr>
+<tr><td>804</td><td>T1</td><td style="text-align:right">USD 3.939</td></tr>
+<tr><td>1208</td><td>T1</td><td style="text-align:right">USD 3.857</td></tr>
+<tr><td>1005</td><td>T1</td><td style="text-align:right">USD 3.815</td></tr>
+</tbody></table></div>
+  <div class="tbl-wrap"><table class="rpt"><thead><tr><th style="text-align:left">Unidad</th><th style="text-align:left">Torre</th><th style="text-align:right">Saldo USD</th></tr></thead><tbody><tr><td>710</td><td>T2</td><td style="text-align:right">USD 3.733</td></tr>
+<tr><td>407</td><td>T2</td><td style="text-align:right">USD 3.383</td></tr>
+<tr><td>1908</td><td>T2</td><td style="text-align:right">USD 3.060</td></tr>
+<tr><td>1807</td><td>T2</td><td style="text-align:right">USD 3.010</td></tr>
+<tr><td>506</td><td>T2</td><td style="text-align:right">USD 2.929</td></tr>
+<tr><td>1501</td><td>T2</td><td style="text-align:right">USD 2.723</td></tr>
+<tr><td>1703</td><td>T1</td><td style="text-align:right">USD 2.674</td></tr>
+<tr><td>903</td><td>T2</td><td style="text-align:right">USD 2.546</td></tr>
+<tr><td>102</td><td>T1</td><td style="text-align:right">USD 2.506</td></tr>
+<tr><td>2004</td><td>T2</td><td style="text-align:right">USD 2.428</td></tr>
+<tr><td>1008</td><td>T2</td><td style="text-align:right">USD 2.392</td></tr>
+<tr><td>1001</td><td>T1</td><td style="text-align:right">USD 2.259</td></tr>
+<tr><td>1901</td><td>T2</td><td style="text-align:right">USD 2.239</td></tr>
+<tr><td>1405</td><td>T1</td><td style="text-align:right">USD 2.192</td></tr>
+<tr><td>608</td><td>T2</td><td style="text-align:right">USD 2.096</td></tr>
+<tr><td>1206</td><td>T2</td><td style="text-align:right">USD 1.856</td></tr>
+<tr><td>101</td><td>T2</td><td style="text-align:right">USD 1.654</td></tr>
+<tr><td>1505</td><td>T1</td><td style="text-align:right">USD 1.424</td></tr>
+<tr><td>607</td><td>T1</td><td style="text-align:right">USD 1.336</td></tr>
+<tr><td>—</td><td style="color:var(--muted);font-style:italic">Otros menores</td><td style="text-align:right">USD 7.002</td></tr>
+<tr class="row-total"><td colspan="2">TOTAL ADELANTADAS</td><td style="text-align:right">USD 171.598</td></tr>
+</tbody></table></div>
+</div>
+
+  </div>
+</section>
+
+<section class="chapter" id="cap5">
+  <div class="ch-header">
+    <span class="ch-num">Sección 5</span>
+    <span class="ch-title">Personal</span>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec-title">5.1 Funcionarios por Sección — Al 30/04/2026</div>
+    <div class="sec-title" style="margin-top:1rem">5.1.1 Personal de Todo el Año</div>
+<div class="kpi-row">
+<div style="background:#fff;border-radius:8px;border-left:5px solid #1C2955;
+            padding:1rem 1.25rem;box-shadow:0 1px 6px rgba(2,62,138,.08)">
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+              color:#1C2955;margin-bottom:.35rem">Jefe Operativo</div>
+  <div style="font-size:2.2rem;font-weight:800;color:var(--ocean1);line-height:1.1">1</div>
+  <div style="font-size:11px;color:var(--muted);margin-top:.1rem">funcionarios activos</div>
+  <div style="font-size:14px;font-weight:700;color:var(--tx);margin-top:.5rem">$ 266.182</div><div style="font-size:11px;color:var(--muted)">sueldos al mes de cierre</div>
+</div>
+<div style="background:#fff;border-radius:8px;border-left:5px solid #0077B6;
+            padding:1rem 1.25rem;box-shadow:0 1px 6px rgba(2,62,138,.08)">
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+              color:#0077B6;margin-bottom:.35rem">Administración</div>
+  <div style="font-size:2.2rem;font-weight:800;color:var(--ocean1);line-height:1.1">2</div>
+  <div style="font-size:11px;color:var(--muted);margin-top:.1rem">funcionarios activos</div>
+  <div style="font-size:14px;font-weight:700;color:var(--tx);margin-top:.5rem">$ 223.954</div><div style="font-size:11px;color:var(--muted)">sueldos al mes de cierre</div>
+</div>
+<div style="background:#fff;border-radius:8px;border-left:5px solid #0096C7;
+            padding:1rem 1.25rem;box-shadow:0 1px 6px rgba(2,62,138,.08)">
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+              color:#0096C7;margin-bottom:.35rem">Recepciones</div>
+  <div style="font-size:2.2rem;font-weight:800;color:var(--ocean1);line-height:1.1">9</div>
+  <div style="font-size:11px;color:var(--muted);margin-top:.1rem">funcionarios activos</div>
+  <div style="font-size:14px;font-weight:700;color:var(--tx);margin-top:.5rem">$ 665.710</div><div style="font-size:11px;color:var(--muted)">sueldos al mes de cierre</div>
+</div>
+</div>
+<div class="kpi-row">
+<div style="background:#fff;border-radius:8px;border-left:5px solid #00B4D8;
+            padding:1rem 1.25rem;box-shadow:0 1px 6px rgba(2,62,138,.08)">
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+              color:#00B4D8;margin-bottom:.35rem">Garita</div>
+  <div style="font-size:2.2rem;font-weight:800;color:var(--ocean1);line-height:1.1">5</div>
+  <div style="font-size:11px;color:var(--muted);margin-top:.1rem">funcionarios activos</div>
+  <div style="font-size:14px;font-weight:700;color:var(--tx);margin-top:.5rem">$ 327.451</div><div style="font-size:11px;color:var(--muted)">sueldos al mes de cierre</div>
+</div>
+<div style="background:#fff;border-radius:8px;border-left:5px solid #2ECC71;
+            padding:1rem 1.25rem;box-shadow:0 1px 6px rgba(2,62,138,.08)">
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+              color:#2ECC71;margin-bottom:.35rem">Limpieza</div>
+  <div style="font-size:2.2rem;font-weight:800;color:var(--ocean1);line-height:1.1">13</div>
+  <div style="font-size:11px;color:var(--muted);margin-top:.1rem">funcionarios activos</div>
+  <div style="font-size:14px;font-weight:700;color:var(--tx);margin-top:.5rem">$ 924.861</div><div style="font-size:11px;color:var(--muted)">sueldos al mes de cierre</div>
+</div>
+<div style="background:#fff;border-radius:8px;border-left:5px solid #E67E22;
+            padding:1rem 1.25rem;box-shadow:0 1px 6px rgba(2,62,138,.08)">
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+              color:#E67E22;margin-bottom:.35rem">Mantenimiento</div>
+  <div style="font-size:2.2rem;font-weight:800;color:var(--ocean1);line-height:1.1">12</div>
+  <div style="font-size:11px;color:var(--muted);margin-top:.1rem">funcionarios activos</div>
+  <div style="font-size:14px;font-weight:700;color:var(--tx);margin-top:.5rem">$ 1.018.801</div><div style="font-size:11px;color:var(--muted)">sueldos al mes de cierre</div>
+</div>
+</div>
+<div class="sec-title" style="margin-top:1rem">5.1.2 Personal de Temporada</div>
+<div class="kpi-row">
+<div style="background:#fff;border-radius:8px;border-left:5px solid #6C3483;
+            padding:1rem 1.25rem;box-shadow:0 1px 6px rgba(2,62,138,.08)">
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+              color:#6C3483;margin-bottom:.35rem">Coordinadores</div>
+  <div style="font-size:2.2rem;font-weight:800;color:var(--ocean1);line-height:1.1">0</div>
+  <div style="font-size:11px;color:var(--muted);margin-top:.1rem">funcionarios activos</div>
+  <div style="font-size:11px;color:var(--muted);margin-top:.5rem;font-style:italic">sin datos salariales</div>
+</div>
+<div style="background:#fff;border-radius:8px;border-left:5px solid #9B59B6;
+            padding:1rem 1.25rem;box-shadow:0 1px 6px rgba(2,62,138,.08)">
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+              color:#9B59B6;margin-bottom:.35rem">Recreación</div>
+  <div style="font-size:2.2rem;font-weight:800;color:var(--ocean1);line-height:1.1">0</div>
+  <div style="font-size:11px;color:var(--muted);margin-top:.1rem">funcionarios activos</div>
+  <div style="font-size:11px;color:var(--muted);margin-top:.5rem;font-style:italic">sin datos salariales</div>
+</div>
+<div style="background:#fff;border-radius:8px;border-left:5px solid #F39C12;
+            padding:1rem 1.25rem;box-shadow:0 1px 6px rgba(2,62,138,.08)">
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+              color:#F39C12;margin-bottom:.35rem">Playa</div>
+  <div style="font-size:2.2rem;font-weight:800;color:var(--ocean1);line-height:1.1">0</div>
+  <div style="font-size:11px;color:var(--muted);margin-top:.1rem">funcionarios activos</div>
+  <div style="font-size:11px;color:var(--muted);margin-top:.5rem;font-style:italic">sin datos salariales</div>
+</div>
+</div>
+<div class="sec-title" style="margin-top:1rem">5.1.3 Seguro de Desempleo</div>
+<div class="kpi-row">
+<div style="background:#fff;border-radius:8px;border-left:5px solid #6C757D;
+        padding:1rem 1.25rem;box-shadow:0 1px 6px rgba(2,62,138,.08)">
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+              color:#6C757D;margin-bottom:.35rem">Seguro de Desempleo</div>
+  <div style="font-size:2.2rem;font-weight:800;color:var(--ocean1);line-height:1.1">4</div>
+  <div style="font-size:11px;color:var(--muted);margin-top:.1rem">funcionarios en seguro de paro</div>
+  <div style="font-size:14px;font-weight:700;color:var(--tx);margin-top:.5rem">$ 271.637</div><div style="font-size:11px;color:var(--muted)">subsidios al mes de cierre</div>
+</div>
+</div>
+
+
+    <div class="sec-title">5.2 Evolución del Costo Total de Personal</div>
+    <div class="chart-wrap">
+      <h4>Costo mensual de personal — Rubro 511 Balancete (en pesos corrientes)</h4>
+      <div class="chart-container"><canvas id="chartPersonal"></canvas></div>
+      <p style="font-size:11px;color:var(--muted);margin-top:.6rem;padding:.5rem .75rem;
+                background:var(--sand);border-radius:4px;font-style:italic">
+        * Incluye todos los rubros salariales registrados en el Rubro 511: salarios base,
+        uniformes, canastas familiares, útiles escolares, aguinaldos, salarios vacacionales
+        y demás beneficios sociales.
+      </p>
+    </div>
+
+    <div class="sec-title">5.3 Evolución de la Cantidad de Personal</div>
+    <div class="chart-wrap">
+      <h4>Funcionarios activos por mes — Ejercicio 2026</h4>
+      <div class="chart-container"><canvas id="chartStaff"></canvas></div>
+    </div>
+
+  </div>
+</section>
+
+<section class="chapter" id="cap6" style="margin-bottom:1.5rem">
+  <div class="ch-header">
+    <span class="ch-num">Sección 6</span>
+    <span class="ch-title">Documentos de Interés</span>
+  </div>
+  <div class="ch-body">
+    <div class="sec-title" style="margin-top:1.2rem">Actas</div>
+<div style="display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:.5rem">
+
+<span style="opacity:.55;cursor:not-allowed">
+<div style="background:#fff;border:1px solid var(--sand2);border-radius:8px;
+            padding:.85rem 1rem;min-width:200px;max-width:280px;
+            box-shadow:0 1px 4px rgba(0,0,0,.07);display:flex;flex-direction:column;gap:.3rem">
+  <div style="display:flex;align-items:center;gap:.5rem">
+    <span style="font-size:20px;color:var(--muted)">📄</span>
+    <span style="font-weight:700;font-size:13px;color:var(--ocean1)">Acta Asamblea Ordinaria 2025</span>
+  </div>
+  <span style="font-size:12px;color:var(--muted);line-height:1.4">Acta de la asamblea ordinaria de copropietarios — Ejercicio 2025</span>
+  <span style="font-size:10px;color:var(--muted);margin-top:.25rem">Sin enlace configurado</span>
+</div>
+</span>
+</div>
+<div class="sec-title" style="margin-top:1.2rem">Presupuestos</div>
+<div style="display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:.5rem">
+
+<span style="opacity:.55;cursor:not-allowed">
+<div style="background:#fff;border:1px solid var(--sand2);border-radius:8px;
+            padding:.85rem 1rem;min-width:200px;max-width:280px;
+            box-shadow:0 1px 4px rgba(0,0,0,.07);display:flex;flex-direction:column;gap:.3rem">
+  <div style="display:flex;align-items:center;gap:.5rem">
+    <span style="font-size:20px;color:var(--muted)">📄</span>
+    <span style="font-weight:700;font-size:13px;color:var(--ocean1)">Presupuesto Ejercicio 2026</span>
+  </div>
+  <span style="font-size:12px;color:var(--muted);line-height:1.4">Presupuesto de gastos aprobado para el Ejercicio 2026</span>
+  <span style="font-size:10px;color:var(--muted);margin-top:.25rem">Sin enlace configurado</span>
+</div>
+</span>
+</div>
+<div class="sec-title" style="margin-top:1.2rem">Contratos</div>
+<div style="display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:.5rem">
+
+<span style="opacity:.55;cursor:not-allowed">
+<div style="background:#fff;border:1px solid var(--sand2);border-radius:8px;
+            padding:.85rem 1rem;min-width:200px;max-width:280px;
+            box-shadow:0 1px 4px rgba(0,0,0,.07);display:flex;flex-direction:column;gap:.3rem">
+  <div style="display:flex;align-items:center;gap:.5rem">
+    <span style="font-size:20px;color:var(--muted)">📄</span>
+    <span style="font-weight:700;font-size:13px;color:var(--ocean1)">Contrato de Administración</span>
+  </div>
+  <span style="font-size:12px;color:var(--muted);line-height:1.4">Contrato vigente de administración del edificio</span>
+  <span style="font-size:10px;color:var(--muted);margin-top:.25rem">Sin enlace configurado</span>
+</div>
+</span>
+</div>
+
+  </div>
+</section>
+
+<div class="rpt-footer">
+  Informe CF &amp; CD generado por <strong>Lic. Federico Ayala — Ayala Administración &amp; Gerencia</strong> ·
+  Ocean Drive · Ejercicio 2026 · Cierre Abril 2026 · Emitido: 27/05/2026
+</div>
+
+</main>
+
+<script>
+function toggleSidebar() {
+  const s = document.getElementById('sidebar');
+  const o = document.getElementById('overlay');
+  const open = s.classList.toggle('open');
+  o.style.display = open ? 'block' : 'none';
+}
+
+function toggleGrp(id) {
+  const rows = document.querySelectorAll('[data-grp="' + id + '"]');
+  const ico  = document.getElementById('ico_' + id);
+  const hidden = rows.length > 0 && rows[0].style.display === 'none';
+  rows.forEach(r => r.style.display = hidden ? '' : 'none');
+  if (ico) ico.textContent = hidden ? '▼' : '▶';
+}
+
+const sections = document.querySelectorAll('section[id]');
+const links    = document.querySelectorAll('.sidebar a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) cur = s.id; });
+  links.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#'+cur);
+  });
+});
+
+
+const ctxPrev = document.getElementById('chartPrev').getContext('2d');
+new Chart(ctxPrev, {
+  type: 'bar',
+  data: {
+    labels: ["Q1", "Q2", "Q3", "Q4"],
+    datasets: [
+      { label:'Preventivo Ej. 2026', data:[712990.0, 627378.0, 0.0, 0.0],
+         backgroundColor:'rgba(0,119,182,.7)', borderColor:'#0077B6', borderWidth:1.5 },
+      { label:'Preventivo Ej. 2025', data:[799729.0, 792809.0, 660532.0, 698045.0],
+         backgroundColor:'rgba(144,224,239,.6)', borderColor:'#90E0EF', borderWidth:1.5 }
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ position:'bottom', labels:{ font:{ size:11 } } } },
+    scales:{ y:{ ticks:{ callback: v => 'USD '+Intl.NumberFormat('en-US',{notation:'compact'}).format(v) } } }
+  }
+});
+
+const ctxCostos = document.getElementById('chartCostos').getContext('2d');
+new Chart(ctxCostos, {
+  type: 'doughnut',
+  data: {
+    labels: ["511 PERSONAL", "514 GASTOS OPERATIVOS", "512 SERVICIOS", "517 ARREGLOS DE OBRA", "516 PARRILLERO", "518 GASTOS BANCARIOS"],
+    datasets: [{
+      data: [33358828.0, 11479366.0, 8118686.0, 1803573.0, 456350.0, 57938.0],
+      backgroundColor: ["#1C2955", "#0077B6", "#00B4D8", "#48CAE4", "#90E0EF", "#E76F51"],
+      borderWidth: 2,
+      borderColor: '#fff',
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '58%',
+    layout: { padding: 50 },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            const v = ctx.parsed;
+            const pct = ((v / 55081965.0) * 100).toFixed(1);
+            const fmt = '$' + Intl.NumberFormat('es-UY').format(v);
+            return ` ${ctx.label}: ${fmt} (${pct}%)`;
+          }
+        }
+      },
+      datalabels: {
+        display: ctx => ctx.dataset.data[ctx.dataIndex] / 55081965.0 > 0.02,
+        anchor: 'end',
+        align: 'end',
+        offset: 8,
+        color: '#333',
+        font: { size: 11, weight: '600' },
+        formatter: (value, ctx) => {
+          const pct = ((value / 55081965.0) * 100).toFixed(1);
+          const fmt = Intl.NumberFormat('es-UY', {notation:'compact',maximumFractionDigits:1}).format(value);
+          const name = ctx.chart.data.labels[ctx.dataIndex].replace(/^\d+\s+/, '');
+          return `${name}\n${pct}%  $${fmt}`;
+        },
+        textAlign: 'center'
+      }
+    }
+  },
+  plugins: [ChartDataLabels]
+});
+
+const ctxPers = document.getElementById('chartPersonal').getContext('2d');
+new Chart(ctxPers, {
+  type: 'bar',
+  data: {
+    labels: ["Nov", "Dic", "Ene", "Feb", "Mar", "Abr"],
+    datasets: [{
+      label: 'Costo total de personal ($U)',
+      data: [4059530.0, 7624839.0, 6392821.0, 6540661.0, 4840961.0, 3900017.0],
+      backgroundColor: 'rgba(0,150,199,.65)',
+      borderColor: '#0096C7',
+      borderWidth: 1.5,
+      borderRadius: 3
+    }]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ display:false } },
+    scales:{ y:{ ticks:{ callback: v => '$'+Intl.NumberFormat('en-US',{notation:'compact'}).format(v) } } }
+  }
+});
+
+const ctxStaff = document.getElementById('chartStaff').getContext('2d');
+new Chart(ctxStaff, {
+  type: 'line',
+  data: {
+    labels: ["Nov", "Dic", "Ene", "Feb", "Mar", "Abr"],
+    datasets: [{
+      label: 'Funcionarios activos',
+      data: [44, 76, 76, 76, 53, 42],
+      borderColor: '#0077B6',
+      backgroundColor: 'rgba(0,119,182,.12)',
+      borderWidth: 2.5,
+      pointRadius: 5,
+      pointBackgroundColor: '#0077B6',
+      fill: true,
+      tension: 0.3
+    }]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ display:false } },
+    scales:{ y:{ beginAtZero:false, ticks:{ stepSize:5 } } }
+  }
+});
+</script>
+</body>
+</html>
