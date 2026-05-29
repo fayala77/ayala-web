@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Reglamento Interno — Edificio Ocean Drive</title>
+<style>
+:root {
+  --navy:  #002D62;
+  --navy2: #003D82;
+  --navy3: #0A509E;
+  --gold:  #C0A06D;
+  --champ: #D3B978;
+  --white: #FFFFFF;
+  --bg:    #F7F4EE;
+  --bg2:   #F0ECE2;
+  --border:#DDD5BE;
+  --text:  #1A1A2E;
+  --muted: #6B6558;
+  --sw:    240px;
+  --srw:   280px;
+  --th:    58px;
+  --highlight: rgba(192,160,109,0.35);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.65}
+
+/* ── TOPBAR ── */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:300;height:var(--th);background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;box-shadow:0 2px 10px rgba(0,45,98,.4)}
+.tb-left{display:flex;align-items:center;gap:12px}
+.tb-logo{background:var(--gold);color:var(--navy);font-weight:800;font-size:12px;padding:4px 10px;border-radius:4px;letter-spacing:.06em;white-space:nowrap}
+.tb-title{color:rgba(255,255,255,.85);font-size:13px}
+.tb-title strong{color:#fff}
+.tb-badge{background:rgba(192,160,109,.2);border:1px solid var(--gold);color:var(--champ);font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;letter-spacing:.04em;white-space:nowrap}
+.menu-btn{display:none;background:none;border:none;cursor:pointer;color:#fff;font-size:22px;padding:4px 8px}
+.search-toggle{display:none;background:none;border:none;cursor:pointer;color:#fff;font-size:18px;padding:4px 8px}
+
+/* ── SIDEBAR LEFT ── */
+.sidebar{position:fixed;top:var(--th);left:0;bottom:0;width:var(--sw);background:var(--white);border-right:1px solid var(--border);overflow-y:auto;z-index:100;padding:1rem 0 2rem;transition:transform .25s}
+.sb-sect{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);padding:.6rem 1rem .2rem;margin-top:.25rem}
+.sidebar a{display:block;padding:.35rem 1rem .35rem 1.25rem;color:var(--text);text-decoration:none;font-size:12.5px;border-left:3px solid transparent;transition:all .15s;line-height:1.4}
+.sidebar a:hover{background:var(--bg);color:var(--navy2)}
+.sidebar a.active{border-left-color:var(--gold);background:var(--bg2);color:var(--navy);font-weight:600}
+.sidebar a.sub{padding-left:1.75rem;font-size:11.5px;color:var(--muted)}
+.sidebar a.sub:hover{color:var(--navy2);background:var(--bg)}
+.sidebar a.sub.active{border-left-color:var(--champ);color:var(--navy);font-weight:600}
+
+/* ── SEARCH PANEL RIGHT ── */
+.search-panel{position:fixed;top:var(--th);right:0;bottom:0;width:var(--srw);background:var(--white);border-left:1px solid var(--border);z-index:100;display:flex;flex-direction:column;transition:transform .25s}
+.sp-head{padding:1rem;border-bottom:1px solid var(--border);background:var(--bg2)}
+.sp-head h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--navy);margin-bottom:.6rem}
+.sp-input-wrap{position:relative}
+.sp-input{width:100%;padding:.5rem .5rem .5rem 2rem;border:1px solid var(--border);border-radius:6px;font-size:13px;background:var(--white);color:var(--text);outline:none;transition:border-color .15s}
+.sp-input:focus{border-color:var(--gold)}
+.sp-icon{position:absolute;left:.6rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none}
+.sp-clear{position:absolute;right:.5rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px;display:none}
+.sp-status{font-size:11px;color:var(--muted);margin-top:.4rem;min-height:1rem}
+.sp-results{flex:1;overflow-y:auto;padding:.5rem 0}
+.sp-result{padding:.6rem 1rem;cursor:pointer;border-bottom:1px solid var(--bg2);transition:background .12s}
+.sp-result:hover{background:var(--bg)}
+.sp-result-title{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:.2rem}
+.sp-result-ctx{font-size:11.5px;color:var(--muted);line-height:1.45}
+.sp-result-ctx mark{background:var(--highlight);color:inherit;border-radius:2px;padding:0 1px}
+.sp-empty{padding:1.5rem 1rem;text-align:center;color:var(--muted);font-size:13px}
+
+/* ── MAIN CONTENT ── */
+.main{margin-left:var(--sw);margin-right:var(--srw);margin-top:var(--th);padding:2rem 2.5rem 5rem;max-width:860px}
+
+/* ── COVER ── */
+.cover{background:var(--white);border-radius:8px;overflow:hidden;margin-bottom:2.5rem;box-shadow:0 4px 28px rgba(0,45,98,.13)}
+.cover-top{background:var(--navy);padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+.cover-brand{color:var(--gold);font-size:13px;font-weight:700;letter-spacing:.05em}
+.cover-brand-sub{color:rgba(255,255,255,.5);font-size:11px;font-weight:400}
+.cover-body{padding:3rem 2.5rem 2rem;text-align:center;background:linear-gradient(150deg,var(--bg2) 0%,var(--white) 60%)}
+.cover-tag{display:inline-block;background:var(--navy);color:var(--champ);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:.3rem 1.2rem;border-radius:99px;margin-bottom:1.25rem}
+.cover-name{font-size:2.4rem;font-weight:800;color:var(--navy);line-height:1.1;letter-spacing:-.02em}
+.cover-sub{font-size:.9rem;color:var(--muted);margin-top:.35rem}
+.cover-div{width:48px;height:3px;background:var(--gold);margin:1.5rem auto;border-radius:99px}
+.cover-version{font-size:1rem;font-weight:700;color:var(--navy2)}
+.cover-footer{background:var(--navy);padding:.85rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+.cover-footer-info{color:rgba(255,255,255,.75);font-size:13px}
+.cover-footer-info strong{color:var(--champ)}
+
+/* ── SECTIONS ── */
+.section{background:var(--white);border-radius:8px;margin-bottom:1.5rem;box-shadow:0 1px 8px rgba(0,45,98,.07);overflow:hidden;scroll-margin-top:calc(var(--th) + 1rem)}
+.sec-header{background:var(--navy);color:var(--white);padding:.85rem 1.5rem;display:flex;align-items:baseline;gap:10px}
+.sec-num{font-size:10px;font-weight:700;opacity:.55;letter-spacing:.1em;text-transform:uppercase;color:var(--champ)}
+.sec-title-text{font-size:15px;font-weight:700}
+.sec-body{padding:1.5rem 1.75rem}
+
+/* subsections */
+.subsec{scroll-margin-top:calc(var(--th) + 1rem);margin-bottom:1.25rem}
+.subsec:last-child{margin-bottom:0}
+.subsec-title{font-size:12.5px;font-weight:700;color:var(--navy2);border-bottom:2px solid var(--bg2);padding-bottom:.35rem;margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.05em}
+
+/* text */
+p{margin-bottom:.75rem;font-size:14px}
+p:last-child{margin-bottom:0}
+ul,ol{margin:.5rem 0 .75rem 1.25rem;font-size:14px}
+li{margin-bottom:.3rem;line-height:1.55}
+strong{font-weight:700}
+
+/* article items (3.x, 4.x…) */
+.art{margin-bottom:.85rem;font-size:14px;line-height:1.6}
+.art-num{display:inline-block;background:var(--bg2);color:var(--navy);font-weight:700;font-size:11px;padding:1px 7px;border-radius:4px;margin-right:.4rem;vertical-align:middle;letter-spacing:.02em}
+
+/* table */
+.tbl-wrap{overflow-x:auto;margin:.75rem 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--navy);color:var(--white);padding:.5rem .75rem;text-align:left;font-size:12px;letter-spacing:.04em}
+td{padding:.45rem .75rem;border-bottom:1px solid var(--border)}
+tr:nth-child(even) td{background:var(--bg)}
+
+/* highlight mark */
+mark.srch{background:var(--highlight);color:inherit;border-radius:2px;padding:0 1px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  :root{--srw:0px}
+  .search-panel{transform:translateX(100%)}
+  .search-panel.open{transform:translateX(0);width:300px;--srw:300px}
+  .search-toggle{display:block}
+  .main{margin-right:0}
+}
+@media(max-width:720px){
+  :root{--sw:0px}
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .menu-btn{display:block}
+  .main{margin-left:0;padding:1.25rem 1rem 4rem}
+  .cover-name{font-size:1.8rem}
+  .cover-body{padding:2rem 1.25rem 1.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="tb-left">
+    <button class="menu-btn" onclick="toggleSidebar()" aria-label="Menú">&#9776;</button>
+    <span class="tb-logo">OCEAN DRIVE</span>
+    <span class="tb-title"><strong>Reglamento Interno</strong></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <span class="tb-badge">Vigente 07/10/2023</span>
+    <button class="search-toggle" onclick="toggleSearch()" aria-label="Buscar">&#128269;</button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sb-sect">Contenido</div>
+  <a href="#portada">Portada</a>
+  <a href="#s2">2. Generalidades</a>
+  <a href="#s2-1" class="sub">2.1 Conocimiento</a>
+  <a href="#s2-2" class="sub">2.2 Derechos de los Copropietarios</a>
+  <a href="#s2-3" class="sub">2.3 Responsabilidad</a>
+  <a href="#s2-4" class="sub">2.4 Sanciones</a>
+  <a href="#s2-5" class="sub">2.5 Destino</a>
+  <a href="#s2-6" class="sub">2.6 Mudanzas</a>
+  <a href="#s3">3. Obligaciones</a>
+  <a href="#s4">4. Prohibiciones</a>
+  <a href="#s5">5. Por Seguridad</a>
+  <a href="#s6">6. Construcción y Reforma</a>
+  <a href="#s7">7. Espacios Comunes</a>
+  <a href="#s7-1" class="sub">7.1 Pórtico / Garita</a>
+  <a href="#s7-2" class="sub">7.2 Canopy / Acceso Vehicular</a>
+  <a href="#s7-3" class="sub">7.3 Estacionamiento de Cortesía</a>
+  <a href="#s7-4" class="sub">7.4 Explanada</a>
+  <a href="#s7-5" class="sub">7.5 Rampa</a>
+  <a href="#s7-6" class="sub">7.6 Garaje / Cocheras</a>
+  <a href="#s7-7" class="sub">7.7 Bicicleteros</a>
+  <a href="#s7-8" class="sub">7.8 Hall de Entrada</a>
+  <a href="#s7-9" class="sub">7.9 Ascensores</a>
+  <a href="#s7-10" class="sub">7.10 Ascensores de Servicio</a>
+  <a href="#s7-11" class="sub">7.11 Animales Domésticos</a>
+  <a href="#s7-12" class="sub">7.12 Juegos y Jardines</a>
+  <a href="#s7-13" class="sub">7.13 Baños Comunes</a>
+  <a href="#s7-14" class="sub">7.14 Lavadero</a>
+  <a href="#s8">8. Amenidades y Servicios</a>
+  <a href="#s8-1" class="sub">8.1 Cupos Piscinas</a>
+  <a href="#s8-2" class="sub">8.2 Micro-cines</a>
+  <a href="#s8-3" class="sub">8.3 Business Center</a>
+  <a href="#s8-4" class="sub">8.4 Gimnasio</a>
+  <a href="#s8-5" class="sub">8.5 Piscinas</a>
+  <a href="#s8-6" class="sub">8.6 Espacio Adulto</a>
+  <a href="#s8-7" class="sub">8.7 Espacio Adolescente</a>
+  <a href="#s8-8" class="sub">8.8 Espacio Infantil</a>
+  <a href="#s8-9" class="sub">8.9 Spa / Sauna / Masajes</a>
+  <a href="#s8-10" class="sub">8.10 Canchas de Tenis</a>
+  <a href="#s8-11" class="sub">8.11 Ciclovía</a>
+  <a href="#s8-12" class="sub">8.12 Parrilleros</a>
+  <a href="#s8-13" class="sub">8.13 Reservas Días Especiales</a>
+  <a href="#s8-14" class="sub">8.14 Servicio de Playa</a>
+  <a href="#s8-15" class="sub">8.15 Cancha Fútbol / Básquet</a>
+  <a href="#s8-16" class="sub">8.16 Servicio de Recreación</a>
+  <a href="#s8-17" class="sub">8.17 Arrendamientos</a>
+  <a href="#s9">9. Sanciones</a>
+  <a href="#s9-1" class="sub">9.1 Faltas Leves (1 UR)</a>
+  <a href="#s9-2" class="sub">9.2 Faltas Graves (1.5 UR)</a>
+  <a href="#s9-3" class="sub">9.3 Faltas Gravísimas (3 UR)</a>
+  <a href="#s9-4" class="sub">9.4 Faltas Agravadas (5 UR)</a>
+  <a href="#s9-5" class="sub">9.5 Faltas Abusivas (10 UR)</a>
+  <a href="#s9-6" class="sub">9.6 Sanciones No Pecuniarias</a>
+  <a href="#s10">10. Gastos Comunes</a>
+  <a href="#s10-1" class="sub">10.1 Pago</a>
+  <a href="#s10-2" class="sub">10.2 Saldos Deudores</a>
+  <a href="#s10-3" class="sub">10.3 Clearing</a>
+  <a href="#s10-4" class="sub">10.4 Deudores Morosos</a>
+  <a href="#s11">11. Vigencia</a>
+  <a href="#s12">12. Anexo</a>
+  <a href="#s12-1" class="sub">12.1 Órganos de Administración</a>
+  <a href="#s12-2" class="sub">12.2 Asamblea de Copropietarios</a>
+  <a href="#s12-3" class="sub">12.3 Comisión Directiva</a>
+  <a href="#s12-4" class="sub">12.4 Del Administrador</a>
+  <a href="#s12-5" class="sub">12.5 Personal del Edificio</a>
+  <a href="#s12-6" class="sub">12.6 Autorización para Construir</a>
+</nav>
+
+<!-- SEARCH PANEL -->
+<aside class="search-panel" id="searchPanel">
+  <div class="sp-head">
+    <h3>&#128269; Buscar en el documento</h3>
+    <div class="sp-input-wrap">
+      <span class="sp-icon">&#128269;</span>
+      <input type="text" class="sp-input" id="searchInput" placeholder="Ej: piscina, mascota, multa…" oninput="doSearch(this.value)">
+      <button class="sp-clear" id="searchClear" onclick="clearSearch()">&#10005;</button>
+    </div>
+    <div class="sp-status" id="searchStatus"></div>
+  </div>
+  <div class="sp-results" id="searchResults">
+    <div class="sp-empty">Escribí una palabra para buscar en todo el reglamento.</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main" id="mainContent">
+
+  <!-- PORTADA -->
+  <div class="cover" id="portada">
+    <div class="cover-top">
+      <div>
+        <div class="cover-brand">AYALA ADMINISTRACIÓN &amp; GESTIÓN</div>
+        <div class="cover-brand-sub">Gestión de Propiedad Horizontal</div>
+      </div>
+      <span style="color:rgba(255,255,255,.4);font-size:12px">Punta del Este, Uruguay</span>
+    </div>
+    <div class="cover-body">
+      <div class="cover-tag">Documento Oficial</div>
+      <div class="cover-name">Reglamento Interno</div>
+      <div class="cover-sub">Edificio Ocean Drive</div>
+      <div class="cover-div"></div>
+      <div class="cover-version">Versión vigente: 07 de octubre de 2023</div>
+    </div>
+    <div class="cover-footer">
+      <div class="cover-footer-info">
+        <strong>Edificio Ocean Drive</strong>
+        Punta del Este, Maldonado, Uruguay
+      </div>
+      <div class="cover-footer-info" style="text-align:right">
+        Aprobado en Asamblea<br>
+        <strong>Ley 10.751 — Propiedad Horizontal</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 2 -->
+  <div class="section" id="s2">
+    <div class="sec-header">
+      <span class="sec-num">Sección 2</span>
+      <span class="sec-title-text">Generalidades</span>
+    </div>
+    <div class="sec-body">
+      <p>El presente Reglamento regirá los derechos y obligaciones de los copropietarios, residentes u ocupantes a cualquier título, ya sea de forma permanente, temporal o accidental del uso de las unidades y bienes comunes que integran el edificio <strong>OCEAN DRIVE</strong>, aplicándose en forma concordante con el Reglamento de Copropiedad y las disposiciones de las leyes 10.751, concordantes y modificativas sobre propiedad horizontal, las disposiciones reglamentarias nacionales y municipales.</p>
+
+      <div class="subsec" id="s2-1">
+        <div class="subsec-title">2.1 Conocimiento</div>
+        <p>Se presume que, por el hecho de haber ocupado una unidad, el titular está en entero conocimiento de este reglamento y acepta en su totalidad todas las normas que en éste se encuentran.</p>
+      </div>
+
+      <div class="subsec" id="s2-2">
+        <div class="subsec-title">2.2 Derechos de los Copropietarios</div>
+        <p>Todos los copropietarios tienen derecho a exigir el cumplimiento del presente reglamento interno, canalizando en todos los casos sus reclamos por medio de la Administración y la Comisión Directiva, conforme a lo reglamentado.</p>
+        <p>En ningún caso se podrá resolver directamente cualquier problema emergente de dichos incumplimientos, sin recurrir previamente y por escrito a la Administración del Edificio.</p>
+        <p>Este reglamento interno debe ser obligatoriamente cumplido por todas aquellas personas que habiten dentro del edificio OCEAN DRIVE: sean titulares de unidades, su familia, visitantes, dependientes, residentes u ocupantes a cualquier título, también el personal y proveedores.</p>
+        <p>La administración y todo el personal en lo que le sea pertinente serán los encargados de que se cumpla la Ley 10.751, sus normas complementarias y modificativas, el Reglamento de Copropiedad, así como todas las normas y recomendaciones que rezan en este reglamento. Quedando el Administrador facultado para hacer las advertencias y aplicar las sanciones previstas.</p>
+      </div>
+
+      <div class="subsec" id="s2-3">
+        <div class="subsec-title">2.3 Responsabilidad</div>
+        <p>Los titulares de unidades se responsabilizan por sus actos u omisiones, de su familia, dependientes, visitantes, inquilinos u otros que hagan uso de espacios comunes o privados alcanzados por el presente reglamento.</p>
+        <p>La copropiedad no se hace responsable del mal uso o abuso de las instalaciones o bienes de uso común, debiendo responder por los mismos el copropietario de la unidad involucrada.</p>
+      </div>
+
+      <div class="subsec" id="s2-4">
+        <div class="subsec-title">2.4 Sanciones</div>
+        <p>Se estipulan sanciones económicas y/o de suspensión en uso de amenidades o espacios de uso común, que se reglamentan en el punto 9 del presente reglamento. El procedimiento de aviso es al Copropietario quien es el responsable de quien resida en su unidad.</p>
+        <p>Los garajes, así como estacionamiento de cortesía deberán respetar la señalización de los mismos sin excederse de los límites. Las sanciones económicas podrán cargarse a los gastos comunes de la unidad sancionada.</p>
+        <p>No obstante, la copropiedad se reserva el derecho a reclamar por daños y perjuicios en los casos previstos por la ley.</p>
+      </div>
+
+      <div class="subsec" id="s2-5">
+        <div class="subsec-title">2.5 Destino</div>
+        <p>El destino de las unidades será el de <strong>casa-habitación</strong> con la absoluta prohibición de otros destinos.</p>
+      </div>
+
+      <div class="subsec" id="s2-6">
+        <div class="subsec-title">2.6 Mudanzas</div>
+        <p>Las mudanzas solo podrán realizarse los <strong>días hábiles</strong>, en el horario de <strong>10:00 a 18:00 hs</strong>, debiendo comunicar previamente día y horario a la administración.</p>
+        <p>Se deberá respetar el horario establecido para ruidos molestos: en temporada de 9 a 13 y de 16 a 20 hs; resto del año de 9 a 18 hs.</p>
+        <p>Las cargas y descargas se realizarán en la zona de estacionamiento de cortesía. El traslado por los ascensores de servicio, donde se deberán tomar las previsiones para no dañarlos (protectores interiores).</p>
+        <p>Quien realice una mudanza será responsable del aseo de las áreas comunes y del cuidado de los bienes de la copropiedad, debiendo reparar cualquier desperfecto causado. En caso omiso, la Administración mandará realizar la limpieza y/o reparación y cargará el gasto en la cuenta de la unidad causante.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 3 -->
+  <div class="section" id="s3">
+    <div class="sec-header">
+      <span class="sec-num">Sección 3</span>
+      <span class="sec-title-text">Obligaciones de los Copropietarios</span>
+    </div>
+    <div class="sec-body">
+      <p>Estas obligaciones son meramente enunciativas y no taxativas. Todos los titulares de unidades, inquilinos, familia de ambos, visitantes, dependientes, ocupantes a cualquier título, proveedores y personal del edificio, tendrán la obligación de:</p>
+      <div class="art"><span class="art-num">3.1</span> Darle a las unidades el destino fijado en este reglamento.</div>
+      <div class="art"><span class="art-num">3.2</span> Darle a los espacios comunes el destino específico para el que fueron creados. En ningún caso podrán ser utilizados de forma diferente a la habilitada y/o reglamentada. Es obligación de cada copropietario u ocupante contribuir con el mantenimiento y la higiene de los mismos.</div>
+      <div class="art"><span class="art-num">3.3</span> Velar por su seguridad, la de los integrantes de su familia, la de cualquier otro y especialmente la de los menores de 18 años cuando se utilizan piscinas, saunas, áreas deportivas y de juegos.</div>
+      <div class="art"><span class="art-num">3.4</span> Comunicar, debidamente por escrito o correo electrónico, el uso de su unidad por familiares u otros a cualquier título, con nombre, documento de identidad y período de ocupación.</div>
+      <div class="art"><span class="art-num">3.5</span> Comunicar a la administración la lista de las personas autorizadas a ingresar a su unidad con nombre, documento de identidad y gestión a realizar. Se deberá aclarar si es por única vez, por un período determinado o hasta nuevo aviso.</div>
+      <div class="art"><span class="art-num">3.6</span> Hacer saber a éstos el contenido de este reglamento, responsabilizándose por cualquier daño o falta cometida por ellos.</div>
+      <div class="art"><span class="art-num">3.7</span> Comunicar de inmediato al Administrador y a la Comisión Directiva cualquier daño, alteración, anormalidad, etc., que se produzca en cualquier sector del edificio o a alguna persona dentro del edificio.</div>
+      <div class="art"><span class="art-num">3.8</span> Permitir el acceso del Administrador o persona debidamente autorizada por éste, a las unidades cuando las circunstancias lo exigieran, así como a operarios autorizados para efectuar reparaciones necesarias.</div>
+      <div class="art"><span class="art-num">3.9</span> Mantener la limpieza y el orden de los espacios comunes y sus instalaciones. Contribuir al mantenimiento de la higiene y cuidado de las personas a su cargo (niños, personas a su servicio, otros).</div>
+      <div class="art"><span class="art-num">3.10</span> No depositar en las unidades o cocheras productos o sustancias peligrosas, inflamables, etc.</div>
+      <div class="art"><span class="art-num">3.11</span> No usar, fuera de los decibeles adecuados, aparatos sonoros tales como: radios, televisores, instrumentos musicales o similares, que puedan alterar la paz o el descanso de los demás copropietarios.</div>
+      <div class="art"><span class="art-num">3.12</span> No realizar ruidos molestos de ninguna índole. Horarios para instalaciones y arreglos: en verano de 9:00 a 13:00 y de 16:00 a 20:00 hs; resto del año de 9 a 18 hs.</div>
+      <div class="art"><span class="art-num">3.13</span> No realizar actos que afecten la moral y buenas costumbres o alteren el orden en los espacios comunes ni en sus unidades si trascienden al exterior.</div>
+      <div class="art"><span class="art-num">3.14</span> Comunicar debidamente cualquier enfermedad infectocontagiosa a los efectos de tomar las precauciones necesarias.</div>
+      <div class="art"><span class="art-num">3.15</span> Informar a la administración cualquier cambio de domicilio o datos necesarios para que ésta pueda cumplir con sus obligaciones.</div>
+      <div class="art"><span class="art-num">3.16</span> Pasar por escrito o email toda inquietud o sugerencia a la administración a los efectos de ser tratada en las reuniones semanales.</div>
+      <div class="art"><span class="art-num">3.17</span> Dejar llaves de su unidad en administración por cualquier eventualidad (cortocircuito, rotura de caños, etc.) o dejar informada la forma de acceso.</div>
+      <div class="art"><span class="art-num">3.18</span> Comunicar a la Administración datos correspondientes en caso de venta, alquiler o cualquier modificación respecto a la titularidad o situación jurídica de la unidad.</div>
+      <div class="art"><span class="art-num">3.19</span> Dar cumplimiento estricto a toda disposición municipal, nacional, al Reglamento de Copropiedad y al presente reglamento interno.</div>
+      <div class="art"><span class="art-num">3.20</span> Responder por los actos, hechos u omisiones del personal que se encuentre a su servicio. Los residentes serán responsables ante el Edificio por el personal que puedan contratar.</div>
+      <div class="art"><span class="art-num">3.21</span> El uso de la rampa de acceso vehicular al edificio es exclusivamente para el tránsito de entrada y salida a los garajes. No está permitido estacionarse ni detenerse en la misma más allá del tiempo necesario para la apertura/cierre de los portones.</div>
+      <div class="art"><span class="art-num">3.22</span> El uso de los ascensores será objeto de especial cuidado evitando el maltrato de aberturas, paredes y botoneras. No se permite el ingreso mojado. En caso de mojar o ensuciar los mismos, deberá realizarse la limpieza de forma inmediata.</div>
+      <div class="art"><span class="art-num">3.23</span> Los proveedores o entregas deberán anunciarse en garita o recepción al ingresar al edificio, debiendo bajar alguien de la unidad que recibe la mercadería o servicio.</div>
+      <div class="art"><span class="art-num">3.24</span> Las cámaras de filmación colocadas en varios puntos del Edificio estarán encendidas las 24 horas. En caso de detectarse actos de vandalismo o faltas, habilita la aplicación de las sanciones establecidas.</div>
+      <div class="art"><span class="art-num">3.25</span> Quien realice una mudanza será responsable del aseo de las áreas comunes.</div>
+      <div class="art"><span class="art-num">3.26</span> Tener los animales que sean permitidos en forma responsable y segura para los copropietarios, haciéndose responsables por cualquier daño o perjuicio que pudieran ocasionar.</div>
+      <div class="art"><span class="art-num">3.27</span> Apartamentos desocupados por tiempo prolongado: se solicita el cierre de pase de agua y de todas las aberturas, y bajar las llaves eléctricas de los sectores que no requieren alimentación.</div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 4 -->
+  <div class="section" id="s4">
+    <div class="sec-header">
+      <span class="sec-num">Sección 4</span>
+      <span class="sec-title-text">Prohibiciones</span>
+    </div>
+    <div class="sec-body">
+      <p>Está prohibido a todos los copropietarios, inquilinos, familia de ambos, visitantes, dependientes, ocupantes a cualquier título, proveedores y personal del edificio:</p>
+      <div class="art"><span class="art-num">4.1</span> Obstruir el paso o depositar objetos personales en espacios comunes. En los jardines no está permitido permanecer en el césped a excepción de donde se encuentran los juegos infantiles.</div>
+      <div class="art"><span class="art-num">4.2</span> Depositar muebles u objetos a la vista en los balcones que puedan comprometer la estética, la moral o la seguridad de todos.</div>
+      <div class="art"><span class="art-num">4.3</span> El uso de motores, máquinas u otros que por sus ruidos o vibraciones alteren la tranquilidad.</div>
+      <div class="art"><span class="art-num">4.4</span> El tendido de ropa (tenders) en terrazas, ventanas o lugares visibles y el usar las mismas como depósito, si comprometen la estética del complejo.</div>
+      <div class="art"><span class="art-num">4.5</span> Sacudir alfombras, ceniceros o arrojar objetos desde las ventanas o terrazas.</div>
+      <div class="art"><span class="art-num">4.6</span> Colocar en la fachada, terrazas, barandas y aberturas visibles desde el exterior antenas, letreros, banderas, etc., salvo autorización expresa de la Comisión Directiva o Asamblea.</div>
+      <div class="art"><span class="art-num">4.7</span> El uso de parrillas portables o cualquier otro implemento similar en las terrazas.</div>
+      <div class="art"><span class="art-num">4.8</span> La instalación de redes de seguridad con anclajes que no sean de acero inoxidable.</div>
+      <div class="art"><span class="art-num">4.9</span> Los toldos, cerramientos de cualquier tipo, mosquiteros u otros que alteren la uniformidad de la fachada del edificio, salvo autorización expresa de la Asamblea.</div>
+      <div class="art"><span class="art-num">4.10</span> Pintar o decorar exteriores de manera diferente al resto, incluyendo fachadas y aberturas sobre espacios comunes.</div>
+      <div class="art"><span class="art-num">4.11</span> Cualquier elemento que produzca mal olor o humo.</div>
+      <div class="art"><span class="art-num">4.12</span> Realizar trabajos de cualquier clase que produzca ruidos molestos en temporada (20 de diciembre al 28 de febrero) sin haber pedido la debida autorización por escrito o mail.</div>
+      <div class="art"><span class="art-num">4.13</span> Ocasionar ruidos molestos. Horarios para trabajos con ruidos (taladros, martillos, sierras): en temporada días hábiles de 9 a 13 y de 16 a 20 hs; resto del año días hábiles de 9 a 18 hs.</div>
+      <div class="art"><span class="art-num">4.14</span> Realizar construcciones no autorizadas que afecten a la regularización del edificio.</div>
+      <div class="art"><span class="art-num">4.15</span> Practicar juegos o deportes en espacios comunes salvo en los debidamente habilitados para ello.</div>
+      <div class="art"><span class="art-num">4.16</span> Arrojar desperdicios, cigarrillos, botellas u otros en espacios comunes.</div>
+      <div class="art"><span class="art-num">4.17</span> Arrojar objetos o desperdicios en cañerías que pudiesen afectar su normal funcionamiento.</div>
+      <div class="art"><span class="art-num">4.18</span> Ingresar de la playa o de las canchas de tenis sin la óptima limpieza del calzado.</div>
+      <div class="art"><span class="art-num">4.19</span> Circular por el edificio con el torso desnudo, descalzo o mojando espacios comunes.</div>
+      <div class="art"><span class="art-num">4.20</span> Solicitar al personal del edificio la realización de tareas propias del residente durante el horario de trabajo del edificio, así como darle órdenes directas.</div>
+      <div class="art"><span class="art-num">4.21</span> Estacionar vehículos en lugares diferentes al asignado a la unidad, así como en zonas de circulación o no asignadas para tal fin. Se prohíbe guardar objetos en los lugares de garaje que provoquen el indebido estacionamiento.</div>
+      <div class="art"><span class="art-num">4.22</span> Estacionar más de 2 hs. en baja temporada y más de 1 hora en temporada en el estacionamiento de cortesía.</div>
+      <div class="art"><span class="art-num">4.23</span> Circular a una velocidad mayor a <strong>10 km/h</strong> en cualquier lugar dentro del predio.</div>
+      <div class="art"><span class="art-num">4.24</span> Andar en bicicleta, monopatín, patines, skate o similares, salvo en los lugares destinados para ello (ciclovías).</div>
+      <div class="art"><span class="art-num">4.25</span> El uso de inflables, papel picado, serpentinas en jardín y parrilleros.</div>
+      <div class="art"><span class="art-num">4.26</span> Dar a los bienes propios o comunes un destino distinto al específico para el que fueron creados.</div>
+      <div class="art"><span class="art-num">4.27</span> Colocar aires acondicionados en fachadas o contrafrentes sin cumplir las especificaciones. La conducción del agua de evaporación deberá realizarse hacia el desagüe más cercano.</div>
+      <div class="art"><span class="art-num">4.28</span> Dejar la BASURA en los paliers, área de estacionamiento o en cualquier otra área común del edificio. Los desechos deberán depositarse en bolsas cerradas en los recipientes destinados a tal fin.</div>
+      <div class="art"><span class="art-num">4.29</span> Estacionar bicicletas en los espacios comunes de circulación. Se pueden colocar en el fondo del garaje o con estructura aérea especial en el propio espacio de estacionamiento.</div>
+      <div class="art"><span class="art-num">4.30</span> Retirar del Edificio los carros de carga. Deben ser devueltos al lugar correspondiente luego de su uso.</div>
+      <div class="art"><span class="art-num">4.31</span> Cortar flores, desgajar o dañar de cualquier forma las plantas u otros objetos que conformen el ornato general del edificio.</div>
+      <div class="art"><span class="art-num">4.32</span> Fumar e ingerir alimentos en espacios comunes no asignados a tal fin.</div>
+      <div class="art"><span class="art-num">4.33</span> Después de las <strong>24:00 hs</strong>, queda terminantemente prohibido que menores de 12 años permanezcan sin supervisión de un adulto responsable en los espacios comunes exteriores.</div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 5 -->
+  <div class="section" id="s5">
+    <div class="sec-header">
+      <span class="sec-num">Sección 5</span>
+      <span class="sec-title-text">Por Seguridad</span>
+    </div>
+    <div class="sec-body">
+      <div class="art"><span class="art-num">5.1</span> No se permitirá el ingreso a ninguna persona ajena al edificio si no está debidamente autorizada.</div>
+      <div class="art"><span class="art-num">5.2</span> No se permitirá el acceso al garaje a ningún vehículo que no esté debidamente registrado. El propietario debe encargarse de dicho registro en garita y recepción.</div>
+      <div class="art"><span class="art-num">5.3</span> No se permitirá la entrada a garaje a más vehículos por unidad que los que admite su derecho a cochera.</div>
+      <div class="art"><span class="art-num">5.4</span> Todos los vehículos deberán esperar en la barrera para el control de acceso.</div>
+      <div class="art"><span class="art-num">5.5</span> Todos los visitantes deberán parar en la barrera y anunciarse en garita para el control de acceso y la comprobación de la autorización.</div>
+      <div class="art"><span class="art-num">5.6</span> Los visitantes deberán estacionar fuera del predio.</div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 6 -->
+  <div class="section" id="s6">
+    <div class="sec-header">
+      <span class="sec-num">Sección 6</span>
+      <span class="sec-title-text">De la Construcción y Reforma</span>
+    </div>
+    <div class="sec-body">
+      <div class="art"><span class="art-num">6.1</span> Las obras en bienes de uso común deberán contar con aprobación de Asamblea, así como cumplir con la normativa nacional y municipal vigente.</div>
+      <div class="art"><span class="art-num">6.2</span> No se podrán instalar equipos de aire acondicionado sin cumplir con las indicaciones autorizadas. No está permitido colgar unidades exteriores sobrepasando el nivel de la baranda. No se permite la colocación de cañería exterior a la vista.</div>
+      <div class="art"><span class="art-num">6.3</span> Las azoteas generales del nivel 18 y 25 deberán mantenerse sin agresión de ningún tipo.</div>
+      <div class="art"><span class="art-num">6.4</span> Los usuarios se obligan a no instalar nada en los jardines que perjudique la estanqueidad de estas zonas. Solo electricistas autorizados por UTE podrán intervenir las instalaciones existentes.</div>
+      <div class="art"><span class="art-num">6.5</span> La sanitaria está ejecutada con materiales no corrosivos. Todo servicio de mantenimiento y desobstrucción deberá ser efectuado por personal especializado que conozca las instalaciones.</div>
+      <div class="art"><span class="art-num">6.6</span> Es habitual la limpieza de sifones de las cajas receptoras en invierno. El personal del edificio hará una limpieza de sifones, desagües en terrazas y chequeo eléctrico de la unidad una vez por año.</div>
+      <div class="art"><span class="art-num">6.7</span> Los azulejos deberán limpiarse adecuadamente, evitando remover las pastinas de las juntas para prevenir posibles filtraciones de agua.</div>
+      <div class="art"><span class="art-num">6.8</span> Los pavimentos de cerámica deberán limpiarse con productos no agresivos y no abrasivos.</div>
+      <div class="art"><span class="art-num">6.9</span> Hay dos tipos de tabiques: unos de materiales rígidos y otros de yeso estructural que exigen tornillos o fijaciones especiales.</div>
+      <div class="art"><span class="art-num">6.10</span> La carpintería deberá preservarse de humedades y golpes provocados por corrientes de aire.</div>
+      <div class="art"><span class="art-num">6.11</span> Las aberturas de aluminio son dobles o con vidrios dobles con cámara de aire; deberán mantenerse limpios los drenajes.</div>
+      <div class="art"><span class="art-num">6.12</span> La calefacción es de losa radiante eléctrica por piso. El termostato no deberá regularse por encima de los 24 grados apenas encendido. Es ideal ir calentando 12 horas antes de usar la vivienda.</div>
+      <div class="art"><span class="art-num">6.13</span> Para TV por cable o DIRECTV, cada propietario deberá contratar de forma particular con la empresa que brinda el servicio.</div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 7 -->
+  <div class="section" id="s7">
+    <div class="sec-header">
+      <span class="sec-num">Sección 7</span>
+      <span class="sec-title-text">Uso de los Espacios Comunes</span>
+    </div>
+    <div class="sec-body">
+
+      <div class="subsec" id="s7-1">
+        <div class="subsec-title">7.1 Del pórtico (garita de entrada al predio)</div>
+        <p>Está prohibido el estacionamiento que obstruya el perfecto pasaje por éste. Es obligatorio detenerse e identificarse cuantas veces le sea requerido.</p>
+        <p>En caso de ingresos en moto o similar, deberá quitarse el casco en el paso por la garita para poder ser identificado (aplica también a delivery).</p>
+        <p>Es de uso una sola vía para entrar y otra para salir, respetando las derechas.</p>
+        <p>Las personas no residentes que deseen ingresar deberán presentarse ante garita a fin de que el personal se comunique con la unidad y solicite la autorización. En el caso de que no contesten, se negará el acceso al visitante, salvo que figure autorizado previamente.</p>
+        <p>El personal de vigilancia recabará por escrito el nombre, documento, unidad a la que se dirige, identificación de la empresa (si corresponde) y el motivo del ingreso.</p>
+      </div>
+
+      <div class="subsec" id="s7-2">
+        <div class="subsec-title">7.2 Del canopy o zona de acceso vehicular de cada torre</div>
+        <p>Está prohibido el estacionamiento en este sector por más del tiempo necesario para ascender y descender de los vehículos.</p>
+      </div>
+
+      <div class="subsec" id="s7-3">
+        <div class="subsec-title">7.3 Del estacionamiento de cortesía</div>
+        <p>Podrán ser utilizados por copropietarios, residentes, invitados y proveedores previa autorización. No se puede permanecer más de <strong>30 minutos</strong>, pasado el cual será sancionada la unidad relacionada con el vehículo.</p>
+      </div>
+
+      <div class="subsec" id="s7-4">
+        <div class="subsec-title">7.4 De la explanada</div>
+        <p>Queda prohibido el estacionamiento en toda ella, así como andar en bicicleta, patines, skates o similares. La explanada está destinada a la circulación de vehículos.</p>
+        <p>Los lava pies deben ser utilizados ÚNICAMENTE para esa función.</p>
+      </div>
+
+      <div class="subsec" id="s7-5">
+        <div class="subsec-title">7.5 De la rampa</div>
+        <p>Se deberá circular a una velocidad máxima de <strong>10 km/h</strong>. El tiempo de permanencia no podrá superar a la espera de apertura o cierre de portones.</p>
+        <p>Queda absolutamente prohibido estacionar, circular en otra dirección a la indicada por las flechas, así como todo tipo de juegos.</p>
+      </div>
+
+      <div class="subsec" id="s7-6">
+        <div class="subsec-title">7.6 Del garaje / cocheras exteriores de uso exclusivo</div>
+        <p>Es el lugar destinado para el estacionamiento de vehículos, no pudiendo darle otro destino. Sólo se podrá estacionar en los lugares expresamente asignados a cada unidad.</p>
+        <p>No puede ser utilizado para acopio de materiales ni depósito de muebles. En las cocheras exteriores no se permite la colocación de boxes ni otros objetos.</p>
+        <p>Se permite instalar cargadores eléctricos para autos en los límites del lugar asignado, debiendo ser colocados por electricistas autorizados por UTE, con conexión al contador de la unidad.</p>
+        <p>Queda prohibido el lavado y/o aspirado de autos en toda el área. No está permitido el arrendamiento de los lugares de garaje a personas ajenas al Edificio.</p>
+        <p>Se autoriza colocar sillas de playa plegables y sombrillas en los garajes, siempre que se coloquen debidamente ordenadas.</p>
+      </div>
+
+      <div class="subsec" id="s7-7">
+        <div class="subsec-title">7.7 Bicicleteros</div>
+        <p>El edificio cuenta con 2 sectores para guardar/estacionar bicicletas. El edificio no será responsable en caso de hurto o daños. Todas las bicicletas deberán contar con una identificación que permita vincularlas con la unidad a la que pertenecen.</p>
+      </div>
+
+      <div class="subsec" id="s7-8">
+        <div class="subsec-title">7.8 Del hall de entrada (recepción)</div>
+        <p>Los halls de entrada son espacios de circulación, corta espera y/o consultas. No podrán utilizarse para paseos, juegos, recreación o reuniones.</p>
+      </div>
+
+      <div class="subsec" id="s7-9">
+        <div class="subsec-title">7.9 De los ascensores</div>
+        <p>Se prohíbe circular por el edificio con el torso desnudo, descalzo o mojando espacios comunes.</p>
+        <p>El uso de los ascensores es de especial cuidado: oprimir el botón de la parada deseada, no sobrecargar el mismo, evitar el maltrato de aberturas, paredes, botonera e iluminación.</p>
+        <p>En caso de mudanzas o ingreso de muebles, ver punto 2.6.</p>
+      </div>
+
+      <div class="subsec" id="s7-10">
+        <div class="subsec-title">7.10 Ascensores de servicio (Torre 1)</div>
+        <p>En Torre 1: todo traslado de objetos, bultos, equipaje, carrito, deberá realizarse por los ascensores de servicio. El personal de servicio particular, del edificio y todo tipo de personal, mudanzas, proveedores, etc., deberán usarlos también.</p>
+        <p>En Torre 2, dado que no cuenta con ascensor de servicio, hay que solicitar en recepción los cobertores para protección en caso de mudanza o traslado de objetos grandes.</p>
+      </div>
+
+      <div class="subsec" id="s7-11">
+        <div class="subsec-title">7.11 Animales domésticos</div>
+        <p>Las mascotas serán permitidas siempre que su tamaño, especie y cantidad no implique riesgo o cause perjuicio para los demás habitantes o visitantes.</p>
+        <p>Dentro del edificio las mascotas (incluidos espacios abiertos) deben ir con correa, debidamente controladas. Los perros de mediano/gran tamaño o que representen algún tipo de peligro deberán circular con bozal.</p>
+        <p>Las mascotas no podrán permanecer, pasear ni hacer sus necesidades dentro de las áreas comunes del edificio ni en sus accesos. Deberán circular por las puertas laterales de ambas torres.</p>
+        <p>Queda terminantemente prohibido dejar animales solos en vehículos en los garajes o en áreas comunes. En caso de animales de asistencia terapéutica, comunicar a la administración.</p>
+      </div>
+
+      <div class="subsec" id="s7-12">
+        <div class="subsec-title">7.12 Zona de juegos infantiles y jardines</div>
+        <p>Los jardines, árboles, plantas y elementos decorativos serán objeto del debido cuidado. Está prohibido cortar o desgajar o dañar los mismos.</p>
+        <p>Los juegos infantiles están destinados al uso por niños, solicitando en niños pequeños la supervisión de los responsables. En las áreas con mesas está permitido ingerir alimentos, debiendo mantener la limpieza al retirarse.</p>
+      </div>
+
+      <div class="subsec" id="s7-13">
+        <div class="subsec-title">7.13 Baños en espacios comunes</div>
+        <p>Hay varios baños en espacios comunes exteriores e interiores, habilitados las 24 horas. Se deberá observar rigurosamente el orden, cuidado del mobiliario, higiene y conducta moral exigibles.</p>
+        <p>No podrá utilizarse para almacenamiento o guardado de materiales, objetos o pertenencias. La papelera es de uso exclusivo del baño.</p>
+      </div>
+
+      <div class="subsec" id="s7-14">
+        <div class="subsec-title">7.14 Lavadero</div>
+        <p>Cada torre tiene un sector lavadero en zona de garajes, con lavadoras y secadoras suministradas por empresa tercerizada. Habilitados las 24 horas para los habitantes. No se permite el uso a personas ajenas no residentes del Edificio.</p>
+        <p>El jabón, suavizante, etc. deberá llevarlo cada usuario. Luego del uso de las secadoras, el usuario dejará limpio el filtro de pelusas.</p>
+        <p>Se solicita dejar estipulado en la máquina el número de apto y hora de finalización del ciclo. En caso de haber terminado el ciclo sin que el usuario se haya presentado, si no hay otra máquina libre, se habilita a retirar la ropa colocándola en el canasto del mismo número de máquina.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 8 -->
+  <div class="section" id="s8">
+    <div class="sec-header">
+      <span class="sec-num">Sección 8</span>
+      <span class="sec-title-text">Uso de las Amenidades y Servicios</span>
+    </div>
+    <div class="sec-body">
+      <p>Las amenidades son de uso exclusivo para copropietarios, residentes e invitados habilitados. No podrán hacer uso de las mismas los copropietarios o residentes de unidades que presenten atrasos en los pagos de gastos comunes.</p>
+
+      <div class="subsec" id="s8-1">
+        <div class="subsec-title">8.1 Cupos generales por unidad para el uso de Piscinas</div>
+        <p>Para los meses de temporada de alta ocupación, se limita la cantidad de usuarios para las piscinas internas. Los usuarios deberán portar una pulsera de goma entregada en la recepción de cada torre.</p>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Tipo de Unidad</th><th>Usuarios máximos</th></tr>
+            <tr><td>1 dormitorio</td><td>4 usuarios</td></tr>
+            <tr><td>1 dormitorio y ½</td><td>5 usuarios</td></tr>
+            <tr><td>2 dormitorios</td><td>6 usuarios</td></tr>
+            <tr><td>3 dormitorios</td><td>8 usuarios</td></tr>
+            <tr><td>4 dormitorios</td><td>10 usuarios</td></tr>
+            <tr><td>Dormis</td><td>2 usuarios</td></tr>
+          </table>
+        </div>
+        <p>Capacidad máxima del recinto: <strong>20 personas</strong>. Tiempo máximo de estadía habiendo gente en espera: <strong>1 hora</strong>.</p>
+      </div>
+
+      <div class="subsec" id="s8-2">
+        <div class="subsec-title">8.2 Micro-cines</div>
+        <p>El edificio en cada torre cuenta con 1 sala de micro-cine, equipada con mobiliario confortable y equipos electrónicos.</p>
+        <p><strong>Horario:</strong> de 10:00 a 2:00 AM. Tiempo máximo por ocupación: 2:30 hs.</p>
+        <p>Está permitida la comida y/o bebida. Requiere reserva previa en las recepciones de cada torre. Los menores de 12 años deberán estar acompañados por un adulto. Los controles quedarán con el personal del edificio. Se deberá informar en recepción una vez finalizado su uso.</p>
+      </div>
+
+      <div class="subsec" id="s8-3">
+        <div class="subsec-title">8.3 Business Center</div>
+        <p>El edificio en cada torre cuenta con 1 sala de Business Center, equipada con mobiliario adecuado para trabajar, 2 PC y conexiones para 6 laptops, además de WI-FI.</p>
+        <p><strong>Horario:</strong> disponible las 24 horas. No requiere reserva mientras haya disponibilidad. No está permitido el acceso con alimentos. Mantener un clima adecuado para el trabajo.</p>
+      </div>
+
+      <div class="subsec" id="s8-4">
+        <div class="subsec-title">8.4 Gimnasio</div>
+        <p>El edificio en cada torre cuenta con 1 sala de Gimnasio (cinta de correr, elíptico, colchonetas, multifunción, pesas, mancuernas, pelota y otros accesorios).</p>
+        <p><strong>Horario:</strong> de 07:00 a 24:00 horas.</p>
+        <p>Tendrán derecho a la utilización solo los copropietarios o residentes. Los copropietarios podrán asistir con un "personal trainer" siempre y cuando éste cumpla con el Reglamento Interno.</p>
+        <p>Será obligatorio el uso de vestimenta y zapatos adecuados. No se permite realizar ejercicios con el torso descubierto. El uso del gimnasio no está permitido a menores de 12 años; de 12 a 16 años deben estar acompañados de un mayor.</p>
+        <p>Están prohibidos los juegos, ingerir alimentos y/o bebidas (salvo bebidas energizantes y agua). Queda terminantemente prohibido lucrar con el uso del gimnasio o dar clases.</p>
+        <p>El complejo cuenta con un desfibrilador en cada torre y todo el personal está capacitado para su uso.</p>
+      </div>
+
+      <div class="subsec" id="s8-5">
+        <div class="subsec-title">8.5 Piscinas</div>
+        <p>El edificio cuenta con una piscina abierta exterior y en cada torre con 1 piscina cerrada interna. Las piscinas internas estarán climatizadas todo el año.</p>
+        <p><strong>Piscinas internas:</strong> de 07:00 a 24:00 horas. <strong>Piscina exterior:</strong> de 07:00 a 24:00 horas durante el verano. Fuera de temporada no está habilitado su uso.</p>
+        <p>Previo a la utilización, los usuarios se deberán duchar en las instalaciones correspondientes. En todas las piscinas será obligatorio usar ropa adecuada.</p>
+        <p>Se prohíbe ingresar a menores de 12 años sin acompañante responsable. No está permitido fumar, comer, llevar botellas y vasos de vidrio. En el deck 5 se podrá tomar mate y está permitido fumar.</p>
+        <p>Las piscinas no cuentan con servicio de guardavidas. El tiempo máximo de permanencia cuando la capacidad está colmada es de <strong>una hora</strong>.</p>
+      </div>
+
+      <div class="subsec" id="s8-6">
+        <div class="subsec-title">8.6 Espacio adulto</div>
+        <p>El edificio cuenta en cada torre con 1 espacio destinado sólo para adultos, disponible sin horario. Consiste en una sala de lectura y una sala de juegos.</p>
+        <p>En la sala de lectura no está permitido el acceso con alimentos. Se debe mantener un clima adecuado para la lectura, en lo posible silencio o volumen bajo.</p>
+      </div>
+
+      <div class="subsec" id="s8-7">
+        <div class="subsec-title">8.7 Espacio adolescente</div>
+        <p>El edificio cuenta en cada torre con 1 espacio para adolescentes y jóvenes (pool, futbolito, mesa de ping-pong, TV, y otros juegos).</p>
+        <p><strong>Horario:</strong> de 10:00 a 24:00 hs. Los menores de 12 años deberán estar supervisados por un adulto.</p>
+        <p>El espacio de Torre 1 se encuentra habilitado todo el año. El de Torre 2 se habilita durante temporada; el resto del año mayores de 12 años pueden solicitar ingreso en recepción.</p>
+      </div>
+
+      <div class="subsec" id="s8-8">
+        <div class="subsec-title">8.8 Espacio infantil</div>
+        <p>El edificio cuenta en cada torre con 1 espacio destinado a niños entre 3 y 10 años, con material didáctico, juegos para pintar, dibujar, leer cuentos, etc.</p>
+        <p><strong>Horario:</strong> de 10:00 a 24:00 hs. El espacio de Torre 1 habilitado todo el año. El de Torre 2 habilitado en temporada; el resto del año se puede solicitar el ingreso en recepción.</p>
+        <p>Cuando no haya supervisión, los niños deberán estar acompañados por un mayor de 18 años. Queda totalmente prohibido retirar cualquier objeto.</p>
+      </div>
+
+      <div class="subsec" id="s8-9">
+        <div class="subsec-title">8.9 Spa / sauna húmedo / sauna seco / sector de masajes / Vestuario</div>
+        <p>El edificio cuenta en cada torre con 1 espacio acondicionado con sauna húmedo, sauna seco, camillas para masajes y vestuario.</p>
+        <p><strong>Horario:</strong> de 07:00 a 24:00 horas. Solo copropietarios o residentes mayores de 18 años. Los menores no podrán ingresar a los saunas.</p>
+        <p>Para el uso del sauna deberán pedirlo con una hora de antelación para la puesta en marcha. Los controles quedarán con el personal. Es obligatorio avisar al finalizar su uso.</p>
+        <p>Cada residente podrá contratar su masajista a su costo, siempre que éste cumpla con el Reglamento Interno.</p>
+      </div>
+
+      <div class="subsec" id="s8-10">
+        <div class="subsec-title">8.10 Canchas de tenis</div>
+        <p>El edificio cuenta con 2 canchas de tenis de polvo de ladrillo con medidas reglamentarias.</p>
+        <p><strong>Horario:</strong> de 8:00 a 23:00 horas. Siempre deberá jugar por lo menos un copropietario o residente.</p>
+        <p>Requiere reserva previa en recepción con registro de cantidad de personas. Uso concedido por períodos de 1 hora. La cancelación debe comunicarse con mínimo 2 horas de anticipación; de no hacerlo, penalidad de 3 días (5 días en caso de reincidencia).</p>
+        <p>Se deberá usar ropa y calzado apropiado para polvo de ladrillo. Está expresamente prohibido jugar con el torso desnudo. Las raquetas y pelotas deberán ser propias. Queda prohibido lucrar con el uso de las canchas o dar clases.</p>
+        <p>A la noche o en caso de requerir iluminación, se pagará por hora el importe fijado por la Administración cada año.</p>
+      </div>
+
+      <div class="subsec" id="s8-11">
+        <div class="subsec-title">8.11 Ciclovía</div>
+        <p>El edificio cuenta con una ciclovía que rodea el perímetro interno del mismo, comenzando y terminando en la garita de entrada. Habilitada para deporte, uso de bicicletas, patinetas o similares.</p>
+        <p>Tener precaución al cruzar la ciclovía en el sector de garita y circulación de vehículos.</p>
+      </div>
+
+      <div class="subsec" id="s8-12">
+        <div class="subsec-title">8.12 Parrilleros</div>
+        <p>El edificio cuenta con parrilleros del 1 al 5 y parrilleros del 6 al 9, todos con mobiliario, vajilla completa, manteles, leña, piñas, carbón y fósforos.</p>
+        <p>Requiere reserva previa en recepción. La reserva incluye el servicio de limpieza. Se puede realizar con una semana máximo de anticipación y se efectiviza con el pago por adelantado.</p>
+        <p><strong>Turnos:</strong> Almuerzo de 10:00 a 17:00 hs; Cena de 19:00 a 3:00 hs. A partir de las 00:00 hs no se permite ruidos molestos ni música.</p>
+        <p>Los Parrilleros 3, 4 y 5 son de uso exclusivo para copropietarios.</p>
+        <p>En caso de cualquier impedimento que no permita hacer uso del mismo, <strong>no se devolverá el pago realizado</strong>.</p>
+        <p>Está prohibido sacar mobiliario, vajilla, etc. fuera del lugar correspondiente. Está prohibido instalar inflables, uso de papel picado y serpentinas. En ningún caso los invitados pueden hacer uso de otras amenidades del complejo.</p>
+      </div>
+
+      <div class="subsec" id="s8-13">
+        <div class="subsec-title">8.13 Reserva de parrilleros días especiales</div>
+        <p>Las reservas para los días 24 (noche), 25 (mediodía), 31 de diciembre (noche) y 1º de enero (mediodía) se gestionan mediante comunicado de la administración. De haber más de un interesado, se procederá a un sorteo a la vista de los interesados con al menos 20 días de anticipación.</p>
+        <p>En estas fechas sólo podrán ser reservados por los propietarios. No se dará uso del parrillero al mismo solicitante en 2 fechas especiales distintas.</p>
+      </div>
+
+      <div class="subsec" id="s8-14">
+        <div class="subsec-title">8.14 Servicio de Playa</div>
+        <p>El edificio cuenta con servicio de playa contratado, sin cargo extra, ubicado en un sector de la Playa Brava durante la temporada (mediados de diciembre a febrero).</p>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Tipo de Unidad</th><th>Servicio incluido</th></tr>
+            <tr><td>1 dormitorio y 1½</td><td>2 sillas y 1 sombrilla</td></tr>
+            <tr><td>2 dormitorios</td><td>3 sillas y 1 sombrilla</td></tr>
+            <tr><td>3 dormitorios</td><td>4 sillas y 1 sombrilla</td></tr>
+            <tr><td>3 dormitorios y servicio</td><td>4 sillas y 1 sombrilla</td></tr>
+          </table>
+        </div>
+        <p>Las sombrillas y sillas son propiedad del edificio; se prohíbe trasladarlas fuera del sector asignado. La playa donde se presta el servicio no está habilitada para mascotas.</p>
+      </div>
+
+      <div class="subsec" id="s8-15">
+        <div class="subsec-title">8.15 Cancha de fútbol / básquet</div>
+        <p>El edificio cuenta con 1 cancha de césped sintético con arcos de fútbol y tablero de básquetbol.</p>
+        <p><strong>Horario:</strong> de 8:00 a 23:00 horas. Se pueden reservar para uso exclusivo en recepción por el lapso de 1 hora. Las pelotas deberán ser propias.</p>
+      </div>
+
+      <div class="subsec" id="s8-16">
+        <div class="subsec-title">8.16 Servicio de recreación</div>
+        <p>El edificio cuenta con servicio de recreación contratado durante la temporada (mediados de diciembre a febrero). Presenta actividades programadas para niños, jóvenes y adultos.</p>
+        <p>El personal se encuentra obligado a cumplir con las reglamentaciones del edificio. El servicio podrá proponer actividades fuera de programa con costo extra a cargo de quien quiera realizarla.</p>
+      </div>
+
+      <div class="subsec" id="s8-17">
+        <div class="subsec-title">8.17 Servicios por arrendamientos u ocupaciones de unidades a cualquier título</div>
+        <p>El edificio no cuenta con servicio de anfitrión relacionado con el arrendamiento. Es responsabilidad del propietario (o persona habilitada por el mismo) ocuparse del ingreso y egreso de ocupantes.</p>
+        <p>El propietario será responsable en todos los términos alcanzados por el Reglamento de Copropiedad, el presente reglamento y comunicaciones de la administración, así como la comunicación de los mismos a quien ocupe su unidad.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 9 -->
+  <div class="section" id="s9">
+    <div class="sec-header">
+      <span class="sec-num">Sección 9</span>
+      <span class="sec-title-text">Instrumentación de Sanciones</span>
+    </div>
+    <div class="sec-body">
+      <p>Las normas de convivencia del presente Reglamento deberán ser respetadas por todos los habitantes, sus dependientes e invitados. En caso de contravención, la sanción podrá ser aplicada directamente por el Administrador.</p>
+      <p>Cualquier transgresión deberá ser comunicada por las siguientes vías:</p>
+      <ul>
+        <li>Recepción</li>
+        <li>Oficina de Operaciones (Jefe Operativo), ubicada frente al gimnasio de Torre 1</li>
+        <li>Administración (ubicada en Torre 2)</li>
+        <li>Correo: <strong>reclamosysugerencias@oceandrive.com.uy</strong></li>
+      </ul>
+      <p>Las denuncias serán de carácter reservado.</p>
+      <p><strong>Primera omisión:</strong> Apercibimiento. <strong>Segunda omisión y siguientes:</strong> sanción pecuniaria.</p>
+
+      <div class="subsec" id="s9-1">
+        <div class="subsec-title">9.1 Faltas Leves — Multa: 1 UR</div>
+        <ul>
+          <li>Mascotas: paseo por áreas no habilitadas y/o que realicen sus necesidades en áreas comunes; no usar correa y/o bozal.</li>
+          <li>Estacionar fuera de las líneas del garaje o en lugar que no le corresponde.</li>
+          <li>Circulación vehicular a mayor velocidad de la permitida.</li>
+          <li>Colgar ropa, uso de tenders en lugares no permitidos.</li>
+          <li>No adoptar vestimenta adecuada al salir de gimnasio, piscinas o saunas.</li>
+          <li>No respetar el orden de llegada para la utilización de los equipos del gimnasio.</li>
+          <li>Circular mojando en espacios comunes y/o ascensores.</li>
+          <li>No mantener clima adecuado en Business Center, espacio adulto, micro-cines.</li>
+          <li>Ingerir alimentos y/o tomar mate en espacios no autorizados.</li>
+          <li>Fumar en áreas comunes no habilitadas.</li>
+        </ul>
+        <p>La primera falta será sancionada con un apercibimiento fundado y escrito.</p>
+      </div>
+
+      <div class="subsec" id="s9-2">
+        <div class="subsec-title">9.2 Faltas Graves — Multa: 1.5 UR</div>
+        <ul>
+          <li>Exceder el tiempo fijado en estacionamientos de cortesía.</li>
+          <li>Colocar cualquier tipo de artículos en espacios de uso común, en especial garajes.</li>
+          <li>No mantener desobstruidas las cañerías y desagües y/o arrojar desperdicios en las mismas.</li>
+          <li>Colocar equipos de aire acondicionado, cañería, ductos o antenas sin mantener las especificaciones establecidas.</li>
+          <li>Arrojar cualquier tipo de objetos a la piscina.</li>
+          <li>Arrojar objetos desde terrazas o ventanas.</li>
+          <li>Lavado o aspirado de vehículos en los garajes o áreas comunes.</li>
+          <li>Realizar ruidos molestos o trabajos de reparación en horario no permitido.</li>
+          <li>Proferir gritos o escuchar música a volumen elevado que cause molestias a los habitantes.</li>
+          <li>Realizar construcciones o instalaciones no autorizadas.</li>
+          <li>La reincidencia de faltas leves.</li>
+        </ul>
+      </div>
+
+      <div class="subsec" id="s9-3">
+        <div class="subsec-title">9.3 Faltas Gravísimas — Multa: 3 UR + suspensión hasta 12 meses</div>
+        <ul>
+          <li>Mantener conductas obscenas, consumir sustancias prohibidas y/o drogas ilegales en áreas comunes.</li>
+          <li>Orinar en espacios comunes que no sea en baños.</li>
+          <li>Alterar la fachada del Edificio en su aspecto estructural y/o estético.</li>
+          <li>Retirar mobiliario sin autorización para uso privado.</li>
+          <li>Instalación o uso de parrillas portátiles en terrazas (excepción: Torre A piso 17 y Torre B piso 24).</li>
+          <li>No remover construcciones o instalaciones no autorizadas luego de ser indicado.</li>
+          <li>La reincidencia, si existen antecedentes, de faltas graves.</li>
+        </ul>
+      </div>
+
+      <div class="subsec" id="s9-4">
+        <div class="subsec-title">9.4 Faltas Agravadas — Multa: 5 UR</div>
+        <ul>
+          <li>Cuando el propietario se dirige a un funcionario faltándole el respeto, violando sus derechos laborales y personales.</li>
+          <li>La reincidencia de faltas graves.</li>
+        </ul>
+      </div>
+
+      <div class="subsec" id="s9-5">
+        <div class="subsec-title">9.5 Faltas Abusivas — Multa: 10 UR</div>
+        <p>Aquello que ha sido sancionado como transgresión agravada y se persiste en esta conducta considerada de total desacato. Aplicada la sanción y persistiendo en su conducta, se podrá suspender los servicios y la utilización de las amenidades por un período entre uno y doce meses.</p>
+        <p>Las multas son por unidad. El pago de la multa es indivisible con el pago del gasto común.</p>
+      </div>
+
+      <div class="subsec" id="s9-6">
+        <div class="subsec-title">9.6 Sanciones no pecuniarias</div>
+        <ul>
+          <li>No podrán hacer uso de las amenidades los copropietarios o residentes con atrasos en los pagos de gastos comunes.</li>
+          <li>No podrá hacer uso de alguna amenidad por el lapso de 3 días quien no canceló una reserva a la que no concurrió (aumentará con la reincidencia).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 10 -->
+  <div class="section" id="s10">
+    <div class="sec-header">
+      <span class="sec-num">Sección 10</span>
+      <span class="sec-title-text">De los Gastos Comunes</span>
+    </div>
+    <div class="sec-body">
+      <p>El perfil del edificio Ocean Drive es de racionalidad en todo sentido. Los gastos comunes están integrados por:</p>
+      <ul>
+        <li>Sueldos, jornales y cargas sociales del Administrador, personal de servicio, portería y otros.</li>
+        <li>Seguros.</li>
+        <li>Energía eléctrica, agua corriente, combustibles, lubricantes y demás elementos para el mantenimiento de los servicios generales.</li>
+        <li>Uniformes del personal y útiles de limpieza.</li>
+        <li>Impuestos nacionales y municipales, tasas, contribuciones, indemnizaciones y demás gastos.</li>
+        <li>Mejoras para el edificio.</li>
+      </ul>
+
+      <div class="subsec" id="s10-1">
+        <div class="subsec-title">10.1 Pago de gastos comunes</div>
+        <p>Los gastos comunes se cobrarán por adelantado. El Administrador enviará trimestralmente un detalle (Preventivo) con los gastos previstos, estableciendo una fecha límite de vencimiento.</p>
+        <p>De abonarse en plazo, se accederá a una <strong>bonificación del 20%</strong> del monto a pagar. Existe un beneficio para buen pagador: se autorizará la bonificación por fuera del plazo, de forma excepcional y por única vez al año, a quienes registren los 4 períodos previos pagos en fecha bonificada.</p>
+      </div>
+
+      <div class="subsec" id="s10-2">
+        <div class="subsec-title">10.2 Saldos deudores</div>
+        <p>En caso de falta de pago de 2 preventivos consecutivos de gastos comunes, se deberá iniciar el proceso de ejecución, siendo título ejecutivo la liquidación que haga el Administrador aprobada por la Asamblea de Copropietarios. La parte adquirente responderá solidariamente por las deudas pendientes al momento de la venta.</p>
+      </div>
+
+      <div class="subsec" id="s10-3">
+        <div class="subsec-title">10.3 Clearing de informes</div>
+        <p>Los deudores que tengan una morosidad de 2 preventivos serán denunciados al Clearing de Informes.</p>
+      </div>
+
+      <div class="subsec" id="s10-4">
+        <div class="subsec-title">10.4 Deudores morosos</div>
+        <p>Los apartamentos que se encuentren morosos no podrán utilizar las amenidades hasta la cancelación total de su deuda.</p>
+        <p>La base de datos de copropietarios e inquilinos se encuentra alcanzada por la <strong>Ley de Protección de Datos Personales (Ley 18331)</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 11 -->
+  <div class="section" id="s11">
+    <div class="sec-header">
+      <span class="sec-num">Sección 11</span>
+      <span class="sec-title-text">Vigencia</span>
+    </div>
+    <div class="sec-body">
+      <p>El presente Reglamento comenzará a regir el día siguiente a su aprobación por parte de la Asamblea de Copropietarios.</p>
+      <p>Sin perjuicio de ello, se concede un plazo de 20 (veinte) días corridos a contar de dicha aprobación a los efectos de que los copropietarios y/o habitantes acondicionen sus unidades y cocheras en los aspectos edilicios a las normas establecidas en el presente Reglamento.</p>
+      <p>Transcurrido dicho plazo sin que se hubiera realizado tal adecuación, serán de aplicación las sanciones establecidas en el presente Reglamento.</p>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 12 -->
+  <div class="section" id="s12">
+    <div class="sec-header">
+      <span class="sec-num">Sección 12</span>
+      <span class="sec-title-text">Anexo — Reglamento de Copropiedad</span>
+    </div>
+    <div class="sec-body">
+
+      <div class="subsec" id="s12-1">
+        <div class="subsec-title">12.1 Órganos de administración (Cap. Vigésimo Cuarto)</div>
+        <p>El edificio será administrado por la Asamblea de Copropietarios y Administrador, contando con la colaboración de la Comisión Directiva y otras comisiones que pueda nombrar la Asamblea.</p>
+        <p>La base de datos de copropietarios e inquilinos se encuentra alcanzada por la Ley de Protección de Datos Personales (Ley 18331).</p>
+      </div>
+
+      <div class="subsec" id="s12-2">
+        <div class="subsec-title">12.2 La Asamblea de Copropietarios (Cap. Vigésimo Quinto)</div>
+        <p>Integrada por todos los copropietarios de las unidades de propiedad horizontal del edificio. Es la <strong>autoridad máxima del edificio</strong>.</p>
+        <p>Se reunirá ordinariamente una vez al año en el mes de enero, y extraordinariamente a pedido del Administrador, Comisión Administrativa, o a solicitud de copropietarios que representen al menos el <strong>25%</strong> del total de votos.</p>
+        <p>La convocatoria será realizada por el Administrador con al menos 10 días de anticipación, mediante citaciones al domicilio electrónico constituido por la unidad en la administración. Los copropietarios pueden hacerse representar mediante poder presentado en Administración con al menos 48 hs de antelación.</p>
+        <p>Compete a la Asamblea General (entre sus principales cometidos): designar y remover al Administrador; determinar su retribución; resolver sobre cuentas y presupuesto; fijar bonificaciones y multas; determinar el monto de los seguros; confeccionar, aprobar y/o modificar los Reglamentos Internos; resolver sobre obras nuevas; vetar resoluciones de Asambleas de cada Bloque que afecten al Complejo.</p>
+      </div>
+
+      <div class="subsec" id="s12-3">
+        <div class="subsec-title">12.3 Comisión Directiva (Cap. Vigésimo Sexto)</div>
+        <p>La Comisión Directiva es un órgano de vigilancia, control, recomendación y sugerencia. Actúa como vínculo entre el propietario y el Administrador, asesorando y controlando su gestión.</p>
+        <p>Estará formada por un mínimo de 3 miembros y un máximo de 7 miembros, copropietarios de ambas torres, al menos uno de ellos deberá vivir en el edificio. Durarán un año en sus funciones. Los cargos son honorarios.</p>
+        <p>Se reunirá con un mínimo de <strong>4 veces al año</strong>. Las resoluciones se adoptarán por al menos la mitad más uno de integrantes.</p>
+        <p>Cualquier copropietario con condición de deudor moroso no podrá ser elegido ni continuar integrando la Comisión.</p>
+        <p>Sus cometidos incluyen: proyectar reformas del Reglamento; dar traslado al Administrador de las inquietudes y problemas; supervisar la gestión del Administrador; tomar medidas urgentes cuando el Administrador no se encuentre disponible.</p>
+      </div>
+
+      <div class="subsec" id="s12-4">
+        <div class="subsec-title">12.4 Del Administrador (Cap. Vigésimo Octavo)</div>
+        <p>El Administrador es la persona física o jurídica designada por la Asamblea Ordinaria, siendo el mandatario contratado (no dependiente) por el consorcio. Durará un año en sus funciones.</p>
+        <p>Entre sus competencias: dirigir el personal; realizar las liquidaciones de sueldos; contratar personal o empresas necesarias; supervisar el estado general del Edificio; convocar en tiempo y forma la Asamblea; realizar los trámites necesarios ante organismos nacionales y municipales; gestionar el cobro de los gastos comunes; emitir rendición de cuentas.</p>
+        <p><strong>El Administrador NO podrá:</strong></p>
+        <ul>
+          <li>Realizar pagos en nombre de la copropiedad sin autorización expresa previa del órgano competente.</li>
+          <li>Constituir deudas u obligaciones con terceros sin autorización expresa.</li>
+          <li>Aumentar los gastos comunes sin la autorización de la Asamblea.</li>
+        </ul>
+        <p>Se prohíbe expresamente la contratación de propietarios y familiares en primer y segundo grado de consanguinidad como funcionarios dependientes de la copropiedad.</p>
+      </div>
+
+      <div class="subsec" id="s12-5">
+        <div class="subsec-title">12.5 El personal del edificio</div>
+        <p>El personal será contratado por el Administrador, en acuerdo con la Asamblea o Comisión Directiva. Se habilita contratar personal zafral en temporada. Se recibirán las órdenes respetando el orden jerárquico establecido.</p>
+        <p>Principales obligaciones del personal:</p>
+        <ul>
+          <li>Dar aviso inmediato al Administrador de cualquier acontecimiento de importancia o reclamo efectuado por copropietarios.</li>
+          <li>Su tarea se limitará a la conservación, mantenimiento y aseo de los bienes comunes, no dentro de las unidades.</li>
+          <li>Vigilar el buen funcionamiento de las máquinas del edificio.</li>
+          <li>La correspondencia destinada a las unidades no será distribuida; cada destinatario podrá consultarla en recepción o Administración.</li>
+          <li>Mantener respeto y buen trato hacia los residentes, personal, proveedores y visitantes.</li>
+          <li>Vestir el uniforme asignado.</li>
+          <li>Estar en conocimiento del presente Reglamento y cumplirlo.</li>
+        </ul>
+      </div>
+
+      <div class="subsec" id="s12-6">
+        <div class="subsec-title">12.6 Autorización especial para construir</div>
+        <p><strong>Torre A planta 18:</strong> Previa autorización de la Administración, se podrá construir pérgolas de madera o techar hasta un máximo del <strong>40%</strong> del área total del bien de uso exclusivo.</p>
+        <p><strong>Torre B planta 23:</strong> No podrán extender y/o agrandar las pérgolas existentes; sí podrán techar.</p>
+        <p>Las construcciones en bienes comunes de uso exclusivo deberán ser aprobadas por la Asamblea de copropietarios (excepto las autorizadas en esta cláusula) y cumplir con las ordenanzas municipales. En ningún caso podrán construir baños ni realizar construcciones más allá de las previstas.</p>
+        <p>Las construcciones deberán contar con autorización municipal. Todos los gastos de regularización serán de cargo del propietario.</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ── SIDEBAR TOGGLE (mobile) ──
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+}
+function toggleSearch(){
+  document.getElementById('searchPanel').classList.toggle('open');
+}
+// Close sidebar when clicking outside on mobile
+document.addEventListener('click', e => {
+  const sb = document.getElementById('sidebar');
+  if(window.innerWidth <= 720 && sb.classList.contains('open')){
+    if(!sb.contains(e.target) && !e.target.closest('.menu-btn')) sb.classList.remove('open');
+  }
+});
+
+// ── ACTIVE SIDEBAR LINK on scroll ──
+const sections = document.querySelectorAll('.section, .subsec, #portada');
+const navLinks = document.querySelectorAll('.sidebar a');
+const th = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--th')) || 58;
+
+function updateActiveLink(){
+  let current = '';
+  sections.forEach(s => {
+    const top = s.getBoundingClientRect().top;
+    if(top <= th + 20) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+}
+window.addEventListener('scroll', updateActiveLink, {passive:true});
+updateActiveLink();
+
+// ── SEARCH ──
+let lastQuery = '';
+let originalNodes = new Map();
+
+function getTextNodes(el){
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+  const nodes = [];
+  let n;
+  while((n = walker.nextNode())) nodes.push(n);
+  return nodes;
+}
+
+function clearHighlights(){
+  document.querySelectorAll('mark.srch').forEach(m => {
+    const parent = m.parentNode;
+    parent.replaceChild(document.createTextNode(m.textContent), m);
+    parent.normalize();
+  });
+}
+
+function escapeRE(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+function highlightInEl(el, query){
+  const textNodes = getTextNodes(el);
+  const re = new RegExp('(' + escapeRE(query) + ')', 'gi');
+  let count = 0;
+  textNodes.forEach(node => {
+    if(!re.test(node.textContent)) return;
+    re.lastIndex = 0;
+    const frag = document.createDocumentFragment();
+    let last = 0, m;
+    while((m = re.exec(node.textContent)) !== null){
+      if(m.index > last) frag.appendChild(document.createTextNode(node.textContent.slice(last, m.index)));
+      const mark = document.createElement('mark');
+      mark.className = 'srch';
+      mark.textContent = m[0];
+      frag.appendChild(mark);
+      count++;
+      last = re.lastIndex;
+    }
+    if(last < node.textContent.length) frag.appendChild(document.createTextNode(node.textContent.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  });
+  return count;
+}
+
+function buildSnippet(text, query, ctx=80){
+  const idx = text.toLowerCase().indexOf(query.toLowerCase());
+  if(idx < 0) return text.slice(0, ctx*2);
+  const start = Math.max(0, idx - ctx);
+  const end = Math.min(text.length, idx + query.length + ctx);
+  let snippet = (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
+  const re = new RegExp('(' + escapeRE(query) + ')', 'gi');
+  return snippet.replace(re, '<mark>$1</mark>');
+}
+
+function doSearch(query){
+  query = query.trim();
+  const clearBtn = document.getElementById('searchClear');
+  const status = document.getElementById('searchStatus');
+  const results = document.getElementById('searchResults');
+  clearBtn.style.display = query ? 'block' : 'none';
+
+  clearHighlights();
+
+  if(query.length < 2){
+    status.textContent = '';
+    results.innerHTML = '<div class="sp-empty">Escribí al menos 2 caracteres para buscar.</div>';
+    return;
+  }
+
+  // Find matches
+  const main = document.getElementById('mainContent');
+  const allSections = main.querySelectorAll('.section, .cover');
+  const matches = [];
+
+  allSections.forEach(sec => {
+    const text = sec.textContent;
+    const re = new RegExp(escapeRE(query), 'gi');
+    let m, count = 0;
+    while(re.exec(text) !== null) count++;
+    if(count > 0){
+      const header = sec.querySelector('.sec-header .sec-title-text, .cover-name');
+      const title = header ? header.textContent : sec.id;
+      const snippet = buildSnippet(text, query);
+      matches.push({id: sec.id, title, snippet, count});
+    }
+  });
+
+  // Highlight in document
+  let total = 0;
+  allSections.forEach(sec => { total += highlightInEl(sec, query); });
+
+  status.textContent = total > 0 ? `${total} coincidencia${total !== 1 ? 's' : ''} encontrada${total !== 1 ? 's' : ''}` : 'Sin resultados';
+
+  if(matches.length === 0){
+    results.innerHTML = '<div class="sp-empty">No se encontraron resultados para "' + query + '".</div>';
+    return;
+  }
+
+  results.innerHTML = matches.map(m => `
+    <div class="sp-result" onclick="scrollToSection('${m.id}')">
+      <div class="sp-result-title">${m.title} <span style="color:var(--gold);font-size:11px">(${m.count})</span></div>
+      <div class="sp-result-ctx">${m.snippet}</div>
+    </div>
+  `).join('');
+}
+
+function scrollToSection(id){
+  const el = document.getElementById(id);
+  if(el){
+    el.scrollIntoView({behavior:'smooth', block:'start'});
+    // close search panel on mobile
+    if(window.innerWidth <= 1100) document.getElementById('searchPanel').classList.remove('open');
+  }
+}
+
+function clearSearch(){
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchClear').style.display = 'none';
+  document.getElementById('searchStatus').textContent = '';
+  document.getElementById('searchResults').innerHTML = '<div class="sp-empty">Escribí una palabra para buscar en todo el reglamento.</div>';
+  clearHighlights();
+}
+
+// Keyboard shortcut: Ctrl+F or / to focus search
+document.addEventListener('keydown', e => {
+  if((e.ctrlKey && e.key === 'f') || e.key === '/'){
+    const input = document.getElementById('searchInput');
+    if(document.activeElement !== input){
+      e.preventDefault();
+      document.getElementById('searchPanel').classList.add('open');
+      input.focus();
+    }
+  }
+  if(e.key === 'Escape') clearSearch();
+});
+</script>
+</body>
+</html>

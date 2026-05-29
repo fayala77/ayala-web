@@ -113,7 +113,18 @@ export const portalContent = {
     reglamentos: [],
     comunicados: [],
     estadosCuenta: [],
-    documentos: [],
+    documentos: [
+      {
+        categoria: 'Documentos de interés',
+        items: [
+          {
+            titulo: 'Reglamento Interno — Edificio Ocean Drive',
+            archivo: '/informes/Reglamento_Interno_OceanDrive.html',
+            info: 'Versión vigente: 07/10/2023',
+          },
+        ],
+      },
+    ],
   },
 } as const
 

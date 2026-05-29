@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/auth'
 import { redirect } from 'next/navigation'
 import { getBuildingContent, getAccessibleBuildings } from '@/lib/portal-content'
-import { Download, FileText } from 'lucide-react'
+import { Download, ExternalLink, FileText } from 'lucide-react'
 
 export default async function DocumentosPage() {
   const session = await getServerSession(authOptions)
@@ -34,29 +34,34 @@ export default async function DocumentosPage() {
                       {cat.categoria}
                     </h3>
                     <div className="space-y-3">
-                      {cat.items.map((doc) => (
-                        <div
-                          key={doc.titulo}
-                          className="bg-white rounded-xl border border-gray-200 p-5 flex items-center justify-between gap-4"
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className="bg-ayala-bg rounded-lg p-2 shrink-0">
-                              <FileText size={16} className="text-ayala-mid" />
-                            </div>
-                            <div>
-                              <p className="font-medium text-ayala-dark text-sm">{doc.titulo}</p>
-                              {doc.info && <p className="text-xs text-gray-400">{doc.info}</p>}
-                            </div>
-                          </div>
-                          <a
-                            href={doc.archivo}
-                            className="flex items-center gap-1 text-ayala-mid hover:text-ayala-dark text-xs font-medium shrink-0"
+                      {cat.items.map((doc) => {
+                        const isHtml = doc.archivo.endsWith('.html')
+                        return (
+                          <div
+                            key={doc.titulo}
+                            className="bg-white rounded-xl border border-gray-200 p-5 flex items-center justify-between gap-4"
                           >
-                            <Download size={13} />
-                            Descargar
-                          </a>
-                        </div>
-                      ))}
+                            <div className="flex items-center gap-3">
+                              <div className="bg-ayala-bg rounded-lg p-2 shrink-0">
+                                <FileText size={16} className="text-ayala-mid" />
+                              </div>
+                              <div>
+                                <p className="font-medium text-ayala-dark text-sm">{doc.titulo}</p>
+                                {doc.info && <p className="text-xs text-gray-400">{doc.info}</p>}
+                              </div>
+                            </div>
+                            <a
+                              href={doc.archivo}
+                              target={isHtml ? '_blank' : undefined}
+                              rel={isHtml ? 'noopener noreferrer' : undefined}
+                              className="flex items-center gap-1 text-ayala-mid hover:text-ayala-dark text-xs font-medium shrink-0"
+                            >
+                              {isHtml ? <ExternalLink size={13} /> : <Download size={13} />}
+                              {isHtml ? 'Ver' : 'Descargar'}
+                            </a>
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
                 ))}
