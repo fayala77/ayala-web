@@ -122,6 +122,11 @@ export const portalContent = {
             archivo: '/informes/Reglamento_Interno_OceanDrive.html',
             info: 'Versión vigente: 07/10/2023',
           },
+          {
+            titulo: 'Informe Gerencial — Abril 2026',
+            archivo: '/informes/Informe_OceanDrive_Abril_2026.html',
+            info: 'Cierre: Abril 2026',
+          },
         ],
       },
     ],
