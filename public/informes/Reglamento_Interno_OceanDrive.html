@@ -39,12 +39,22 @@ body{font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);background:va
 /* ── SIDEBAR LEFT ── */
 .sidebar{position:fixed;top:var(--th);left:0;bottom:0;width:var(--sw);background:var(--white);border-right:1px solid var(--border);overflow-y:auto;z-index:100;padding:1rem 0 2rem;transition:transform .25s}
 .sb-sect{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);padding:.6rem 1rem .2rem;margin-top:.25rem}
+/* enlaces directos (sin subsecciones) */
 .sidebar a{display:block;padding:.35rem 1rem .35rem 1.25rem;color:var(--text);text-decoration:none;font-size:12.5px;border-left:3px solid transparent;transition:all .15s;line-height:1.4}
 .sidebar a:hover{background:var(--bg);color:var(--navy2)}
 .sidebar a.active{border-left-color:var(--gold);background:var(--bg2);color:var(--navy);font-weight:600}
-.sidebar a.sub{padding-left:1.75rem;font-size:11.5px;color:var(--muted)}
-.sidebar a.sub:hover{color:var(--navy2);background:var(--bg)}
-.sidebar a.sub.active{border-left-color:var(--champ);color:var(--navy);font-weight:600}
+/* capítulos colapsables */
+.sb-chapter-btn{display:flex;align-items:center;justify-content:space-between;width:100%;padding:.35rem 1rem .35rem 1.25rem;background:none;border:none;border-left:3px solid transparent;cursor:pointer;font-size:12.5px;color:var(--text);text-align:left;line-height:1.4;transition:all .15s;font-family:inherit}
+.sb-chapter-btn:hover{background:var(--bg);color:var(--navy2)}
+.sb-chapter-btn.active{border-left-color:var(--gold);background:var(--bg2);color:var(--navy);font-weight:600}
+.sb-arrow{font-size:9px;color:var(--muted);transition:transform .2s;flex-shrink:0;margin-left:4px}
+.sb-arrow.open{transform:rotate(90deg)}
+/* subsecciones */
+.sb-subs{display:none}
+.sb-subs.open{display:block}
+.sidebar a.sub{display:block;padding:.3rem 1rem .3rem 2rem;color:var(--muted);text-decoration:none;font-size:11.5px;border-left:3px solid transparent;transition:all .15s;line-height:1.4}
+.sidebar a.sub:hover{background:var(--bg);color:var(--navy2)}
+.sidebar a.sub.active{border-left-color:var(--champ);background:var(--bg2);color:var(--navy);font-weight:600}
 
 /* ── SEARCH PANEL RIGHT ── */
 .search-panel{position:fixed;top:var(--th);right:0;bottom:0;width:var(--srw);background:var(--white);border-left:1px solid var(--border);z-index:100;display:flex;flex-direction:column;transition:transform .25s}
@@ -152,71 +162,110 @@ mark.srch{background:var(--highlight);color:inherit;border-radius:2px;padding:0 
 <!-- SIDEBAR -->
 <nav class="sidebar" id="sidebar">
   <div class="sb-sect">Contenido</div>
+
   <a href="#portada">Portada</a>
-  <a href="#s2">2. Generalidades</a>
-  <a href="#s2-1" class="sub">2.1 Conocimiento</a>
-  <a href="#s2-2" class="sub">2.2 Derechos de los Copropietarios</a>
-  <a href="#s2-3" class="sub">2.3 Responsabilidad</a>
-  <a href="#s2-4" class="sub">2.4 Sanciones</a>
-  <a href="#s2-5" class="sub">2.5 Destino</a>
-  <a href="#s2-6" class="sub">2.6 Mudanzas</a>
+
+  <!-- 2. Generalidades -->
+  <button class="sb-chapter-btn" onclick="toggleChapter('ch2')" id="btn-ch2">
+    <span>2. Generalidades</span><span class="sb-arrow" id="arr-ch2">&#9654;</span>
+  </button>
+  <div class="sb-subs" id="ch2">
+    <a href="#s2-1" class="sub">2.1 Conocimiento</a>
+    <a href="#s2-2" class="sub">2.2 Derechos de los Copropietarios</a>
+    <a href="#s2-3" class="sub">2.3 Responsabilidad</a>
+    <a href="#s2-4" class="sub">2.4 Sanciones</a>
+    <a href="#s2-5" class="sub">2.5 Destino</a>
+    <a href="#s2-6" class="sub">2.6 Mudanzas</a>
+  </div>
+
   <a href="#s3">3. Obligaciones</a>
   <a href="#s4">4. Prohibiciones</a>
   <a href="#s5">5. Por Seguridad</a>
   <a href="#s6">6. Construcción y Reforma</a>
-  <a href="#s7">7. Espacios Comunes</a>
-  <a href="#s7-1" class="sub">7.1 Pórtico / Garita</a>
-  <a href="#s7-2" class="sub">7.2 Canopy / Acceso Vehicular</a>
-  <a href="#s7-3" class="sub">7.3 Estacionamiento de Cortesía</a>
-  <a href="#s7-4" class="sub">7.4 Explanada</a>
-  <a href="#s7-5" class="sub">7.5 Rampa</a>
-  <a href="#s7-6" class="sub">7.6 Garaje / Cocheras</a>
-  <a href="#s7-7" class="sub">7.7 Bicicleteros</a>
-  <a href="#s7-8" class="sub">7.8 Hall de Entrada</a>
-  <a href="#s7-9" class="sub">7.9 Ascensores</a>
-  <a href="#s7-10" class="sub">7.10 Ascensores de Servicio</a>
-  <a href="#s7-11" class="sub">7.11 Animales Domésticos</a>
-  <a href="#s7-12" class="sub">7.12 Juegos y Jardines</a>
-  <a href="#s7-13" class="sub">7.13 Baños Comunes</a>
-  <a href="#s7-14" class="sub">7.14 Lavadero</a>
-  <a href="#s8">8. Amenidades y Servicios</a>
-  <a href="#s8-1" class="sub">8.1 Cupos Piscinas</a>
-  <a href="#s8-2" class="sub">8.2 Micro-cines</a>
-  <a href="#s8-3" class="sub">8.3 Business Center</a>
-  <a href="#s8-4" class="sub">8.4 Gimnasio</a>
-  <a href="#s8-5" class="sub">8.5 Piscinas</a>
-  <a href="#s8-6" class="sub">8.6 Espacio Adulto</a>
-  <a href="#s8-7" class="sub">8.7 Espacio Adolescente</a>
-  <a href="#s8-8" class="sub">8.8 Espacio Infantil</a>
-  <a href="#s8-9" class="sub">8.9 Spa / Sauna / Masajes</a>
-  <a href="#s8-10" class="sub">8.10 Canchas de Tenis</a>
-  <a href="#s8-11" class="sub">8.11 Ciclovía</a>
-  <a href="#s8-12" class="sub">8.12 Parrilleros</a>
-  <a href="#s8-13" class="sub">8.13 Reservas Días Especiales</a>
-  <a href="#s8-14" class="sub">8.14 Servicio de Playa</a>
-  <a href="#s8-15" class="sub">8.15 Cancha Fútbol / Básquet</a>
-  <a href="#s8-16" class="sub">8.16 Servicio de Recreación</a>
-  <a href="#s8-17" class="sub">8.17 Arrendamientos</a>
-  <a href="#s9">9. Sanciones</a>
-  <a href="#s9-1" class="sub">9.1 Faltas Leves (1 UR)</a>
-  <a href="#s9-2" class="sub">9.2 Faltas Graves (1.5 UR)</a>
-  <a href="#s9-3" class="sub">9.3 Faltas Gravísimas (3 UR)</a>
-  <a href="#s9-4" class="sub">9.4 Faltas Agravadas (5 UR)</a>
-  <a href="#s9-5" class="sub">9.5 Faltas Abusivas (10 UR)</a>
-  <a href="#s9-6" class="sub">9.6 Sanciones No Pecuniarias</a>
-  <a href="#s10">10. Gastos Comunes</a>
-  <a href="#s10-1" class="sub">10.1 Pago</a>
-  <a href="#s10-2" class="sub">10.2 Saldos Deudores</a>
-  <a href="#s10-3" class="sub">10.3 Clearing</a>
-  <a href="#s10-4" class="sub">10.4 Deudores Morosos</a>
+
+  <!-- 7. Espacios Comunes -->
+  <button class="sb-chapter-btn" onclick="toggleChapter('ch7')" id="btn-ch7">
+    <span>7. Espacios Comunes</span><span class="sb-arrow" id="arr-ch7">&#9654;</span>
+  </button>
+  <div class="sb-subs" id="ch7">
+    <a href="#s7-1" class="sub">7.1 Pórtico / Garita</a>
+    <a href="#s7-2" class="sub">7.2 Canopy / Acceso Vehicular</a>
+    <a href="#s7-3" class="sub">7.3 Estacionamiento de Cortesía</a>
+    <a href="#s7-4" class="sub">7.4 Explanada</a>
+    <a href="#s7-5" class="sub">7.5 Rampa</a>
+    <a href="#s7-6" class="sub">7.6 Garaje / Cocheras</a>
+    <a href="#s7-7" class="sub">7.7 Bicicleteros</a>
+    <a href="#s7-8" class="sub">7.8 Hall de Entrada</a>
+    <a href="#s7-9" class="sub">7.9 Ascensores</a>
+    <a href="#s7-10" class="sub">7.10 Ascensores de Servicio</a>
+    <a href="#s7-11" class="sub">7.11 Animales Domésticos</a>
+    <a href="#s7-12" class="sub">7.12 Juegos y Jardines</a>
+    <a href="#s7-13" class="sub">7.13 Baños Comunes</a>
+    <a href="#s7-14" class="sub">7.14 Lavadero</a>
+  </div>
+
+  <!-- 8. Amenidades -->
+  <button class="sb-chapter-btn" onclick="toggleChapter('ch8')" id="btn-ch8">
+    <span>8. Amenidades y Servicios</span><span class="sb-arrow" id="arr-ch8">&#9654;</span>
+  </button>
+  <div class="sb-subs" id="ch8">
+    <a href="#s8-1" class="sub">8.1 Cupos Piscinas</a>
+    <a href="#s8-2" class="sub">8.2 Micro-cines</a>
+    <a href="#s8-3" class="sub">8.3 Business Center</a>
+    <a href="#s8-4" class="sub">8.4 Gimnasio</a>
+    <a href="#s8-5" class="sub">8.5 Piscinas</a>
+    <a href="#s8-6" class="sub">8.6 Espacio Adulto</a>
+    <a href="#s8-7" class="sub">8.7 Espacio Adolescente</a>
+    <a href="#s8-8" class="sub">8.8 Espacio Infantil</a>
+    <a href="#s8-9" class="sub">8.9 Spa / Sauna / Masajes</a>
+    <a href="#s8-10" class="sub">8.10 Canchas de Tenis</a>
+    <a href="#s8-11" class="sub">8.11 Ciclovía</a>
+    <a href="#s8-12" class="sub">8.12 Parrilleros</a>
+    <a href="#s8-13" class="sub">8.13 Reservas Días Especiales</a>
+    <a href="#s8-14" class="sub">8.14 Servicio de Playa</a>
+    <a href="#s8-15" class="sub">8.15 Cancha Fútbol / Básquet</a>
+    <a href="#s8-16" class="sub">8.16 Servicio de Recreación</a>
+    <a href="#s8-17" class="sub">8.17 Arrendamientos</a>
+  </div>
+
+  <!-- 9. Sanciones -->
+  <button class="sb-chapter-btn" onclick="toggleChapter('ch9')" id="btn-ch9">
+    <span>9. Sanciones</span><span class="sb-arrow" id="arr-ch9">&#9654;</span>
+  </button>
+  <div class="sb-subs" id="ch9">
+    <a href="#s9-1" class="sub">9.1 Faltas Leves (1 UR)</a>
+    <a href="#s9-2" class="sub">9.2 Faltas Graves (1,5 UR)</a>
+    <a href="#s9-3" class="sub">9.3 Faltas Gravísimas (3 UR)</a>
+    <a href="#s9-4" class="sub">9.4 Faltas Agravadas (5 UR)</a>
+    <a href="#s9-5" class="sub">9.5 Faltas Abusivas (10 UR)</a>
+    <a href="#s9-6" class="sub">9.6 Sanciones No Pecuniarias</a>
+  </div>
+
+  <!-- 10. Gastos Comunes -->
+  <button class="sb-chapter-btn" onclick="toggleChapter('ch10')" id="btn-ch10">
+    <span>10. Gastos Comunes</span><span class="sb-arrow" id="arr-ch10">&#9654;</span>
+  </button>
+  <div class="sb-subs" id="ch10">
+    <a href="#s10-1" class="sub">10.1 Pago</a>
+    <a href="#s10-2" class="sub">10.2 Saldos Deudores</a>
+    <a href="#s10-3" class="sub">10.3 Clearing</a>
+    <a href="#s10-4" class="sub">10.4 Deudores Morosos</a>
+  </div>
+
   <a href="#s11">11. Vigencia</a>
-  <a href="#s12">12. Anexo</a>
-  <a href="#s12-1" class="sub">12.1 Órganos de Administración</a>
-  <a href="#s12-2" class="sub">12.2 Asamblea de Copropietarios</a>
-  <a href="#s12-3" class="sub">12.3 Comisión Directiva</a>
-  <a href="#s12-4" class="sub">12.4 Del Administrador</a>
-  <a href="#s12-5" class="sub">12.5 Personal del Edificio</a>
-  <a href="#s12-6" class="sub">12.6 Autorización para Construir</a>
+
+  <!-- 12. Anexo -->
+  <button class="sb-chapter-btn" onclick="toggleChapter('ch12')" id="btn-ch12">
+    <span>12. Anexo</span><span class="sb-arrow" id="arr-ch12">&#9654;</span>
+  </button>
+  <div class="sb-subs" id="ch12">
+    <a href="#s12-1" class="sub">12.1 Órganos de Administración</a>
+    <a href="#s12-2" class="sub">12.2 Asamblea de Copropietarios</a>
+    <a href="#s12-3" class="sub">12.3 Comisión Directiva</a>
+    <a href="#s12-4" class="sub">12.4 Del Administrador</a>
+    <a href="#s12-5" class="sub">12.5 Personal del Edificio</a>
+    <a href="#s12-6" class="sub">12.6 Autorización para Construir</a>
+  </div>
 </nav>
 
 <!-- SEARCH PANEL -->
@@ -242,7 +291,7 @@ mark.srch{background:var(--highlight);color:inherit;border-radius:2px;padding:0 
   <div class="cover" id="portada">
     <div class="cover-top">
       <div>
-        <div class="cover-brand">AYALA ADMINISTRACIÓN &amp; GESTIÓN</div>
+        <div class="cover-brand">Ayala G&amp;A</div>
         <div class="cover-brand-sub">Gestión de Propiedad Horizontal</div>
       </div>
       <span style="color:rgba(255,255,255,.4);font-size:12px">Punta del Este, Uruguay</span>
@@ -911,7 +960,6 @@ function toggleSidebar(){
 function toggleSearch(){
   document.getElementById('searchPanel').classList.toggle('open');
 }
-// Close sidebar when clicking outside on mobile
 document.addEventListener('click', e => {
   const sb = document.getElementById('sidebar');
   if(window.innerWidth <= 720 && sb.classList.contains('open')){
@@ -919,19 +967,55 @@ document.addEventListener('click', e => {
   }
 });
 
+// ── COLLAPSIBLE CHAPTERS ──
+// Map: section id prefix → chapter id
+const chapterMap = {
+  's2': 'ch2', 's7': 'ch7', 's8': 'ch8', 's9': 'ch9', 's10': 'ch10', 's12': 'ch12'
+};
+
+function toggleChapter(id){
+  const subs = document.getElementById(id);
+  const arrow = document.getElementById('arr-' + id);
+  const isOpen = subs.classList.contains('open');
+  subs.classList.toggle('open', !isOpen);
+  arrow.classList.toggle('open', !isOpen);
+}
+
+function openChapter(id){
+  const subs = document.getElementById(id);
+  const arrow = document.getElementById('arr-' + id);
+  if(subs && !subs.classList.contains('open')){
+    subs.classList.add('open');
+    arrow.classList.add('open');
+  }
+}
+
 // ── ACTIVE SIDEBAR LINK on scroll ──
 const sections = document.querySelectorAll('.section, .subsec, #portada');
 const navLinks = document.querySelectorAll('.sidebar a');
+const chapterBtns = document.querySelectorAll('.sb-chapter-btn');
 const th = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--th')) || 58;
 
 function updateActiveLink(){
   let current = '';
   sections.forEach(s => {
-    const top = s.getBoundingClientRect().top;
-    if(top <= th + 20) current = s.id;
+    if(s.getBoundingClientRect().top <= th + 20) current = s.id;
   });
+
+  // active on plain links
   navLinks.forEach(a => {
     a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+
+  // active on chapter buttons + auto-open chapter
+  chapterBtns.forEach(btn => {
+    const chId = btn.id.replace('btn-', '');
+    // find matching chapter from chapterMap values
+    const prefix = Object.keys(chapterMap).find(k => chapterMap[k] === chId);
+    if(!prefix) return;
+    const isActive = current === prefix || current.startsWith(prefix + '-');
+    btn.classList.toggle('active', isActive);
+    if(isActive) openChapter(chId);
   });
 }
 window.addEventListener('scroll', updateActiveLink, {passive:true});
