@@ -26,7 +26,7 @@ export interface BuildingInfo {
   abitab?: string
 }
 
-export const buildings: Record<string, BuildingInfo> = {
+const buildings: Record<string, BuildingInfo> = {
   'Chesterfield Tower': {
     nombre: 'Chesterfield Tower',
     direccion: 'Av. Italia y Orinoco, Punta del Este, Uruguay',
@@ -176,4 +176,12 @@ export const buildings: Record<string, BuildingInfo> = {
 
 export function getBuildingInfo(building: string): BuildingInfo | null {
   return buildings[building] ?? null
+}
+
+export function getBuildingNames(): string[] {
+  return Object.keys(buildings)
+}
+
+export function isValidBuilding(name: string): boolean {
+  return name in buildings
 }

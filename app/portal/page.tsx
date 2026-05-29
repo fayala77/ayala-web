@@ -1,5 +1,6 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/auth'
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { FileText, BookOpen, Bell, CreditCard, FolderOpen, Calculator, Building2 } from 'lucide-react'
 
@@ -15,6 +16,7 @@ const sections = [
 
 export default async function PortalPage() {
   const session = await getServerSession(authOptions)
+  if (!session) redirect('/login')
 
   return (
     <div>

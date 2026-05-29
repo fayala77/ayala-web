@@ -38,8 +38,10 @@ export const authOptions: NextAuthOptions = {
       const mcUser = await getMailchimpUser(user.email)
       return mcUser !== null
     },
-    async jwt({ token }) {
-      if (token.email && !token.building) {
+    async jwt({ token, user }) {
+      // `user` is only present on the initial sign-in, not on subsequent requests.
+      // This prevents both infinite Mailchimp retries and stale-token accumulation.
+      if (user && token.email) {
         const admin = allowedUsers.find((u) => u.email === token.email)
         if (admin) {
           token.role = admin.role
@@ -65,6 +67,9 @@ export const authOptions: NextAuthOptions = {
       }
       return session
     },
+  },
+  session: {
+    maxAge: 8 * 60 * 60, // 8 horas — limita la ventana de acceso con token stale
   },
   pages: {
     signIn: '/login',

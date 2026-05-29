@@ -1,3 +1,5 @@
+import { isValidBuilding } from '@/lib/buildings'
+
 export interface MailchimpUser {
   name: string
   building: string
@@ -27,9 +29,8 @@ export async function getMailchimpUser(email: string): Promise<MailchimpUser | n
   const member = data.exact_matches?.members?.[0]
   if (!member) return null
 
-  const building = (member.tags as { id: number; name: string }[])?.find(
-    (t) => t.name
-  )?.name ?? null
+  const building = (member.tags as { id: number; name: string }[])
+    ?.find((t) => isValidBuilding(t.name))?.name ?? null
 
   const unit = member.merge_fields?.UNIDAD ?? null
   const name = [member.merge_fields?.FNAME, member.merge_fields?.LNAME]

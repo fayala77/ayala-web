@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/auth'
 import { redirect } from 'next/navigation'
-import { getBuildingInfo, buildings } from '@/lib/buildings'
+import { getBuildingInfo, getBuildingNames } from '@/lib/buildings'
 import { MapPin, Phone, Mail, User, Building2, CreditCard, Shield, Clock } from 'lucide-react'
 
 function InfoRow({ label, value }: { label: string; value?: string }) {
@@ -32,7 +32,7 @@ export default async function EdificioPage() {
 
   const isAdmin = session.user.role === 'admin'
   const buildingNames = isAdmin
-    ? Object.keys(buildings)
+    ? getBuildingNames()
     : [session.user.building!]
 
   return (
