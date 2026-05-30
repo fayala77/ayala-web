@@ -31,7 +31,7 @@ export async function getCampaignsByBuilding(building: string): Promise<Campaign
   const fields = 'campaigns.id,campaigns.settings.subject_line,campaigns.send_time,campaigns.archive_url,campaigns.recipients.segment_text'
 
   const res = await fetch(
-    `https://${server}.api.mailchimp.com/3.0/campaigns?status=sent&count=100&fields=${fields}`,
+    `https://${server}.api.mailchimp.com/3.0/campaigns?status=sent&count=500&sort_field=send_time&sort_dir=DESC&fields=${fields}`,
     {
       headers: {
         Authorization: `Basic ${Buffer.from(`anystring:${apiKey}`).toString('base64')}`,
