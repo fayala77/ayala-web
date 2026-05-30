@@ -111,18 +111,20 @@ export const portalContent: Record<string, BuildingContent> = {
 
   'Ocean Drive': {
     actas: [],
-    reglamentos: [],
+    reglamentos: [
+      {
+        titulo: 'Reglamento Interno',
+        descripcion: 'Reglamento interno vigente del Edificio Ocean Drive.',
+        vigente: true,
+        archivo: '/informes/Reglamento_Interno_OceanDrive.html',
+      },
+    ],
     comunicados: [],
     estadosCuenta: [],
     documentos: [
       {
-        categoria: 'Documentos de interés',
+        categoria: 'Informes',
         items: [
-          {
-            titulo: 'Reglamento Interno — Edificio Ocean Drive',
-            archivo: '/informes/Reglamento_Interno_OceanDrive.html',
-            info: 'Versión vigente: 07/10/2023',
-          },
           {
             titulo: 'Informe Gerencial — Abril 2026',
             archivo: '/informes/Informe_OceanDrive_Abril_2026.html',
