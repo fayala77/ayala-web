@@ -42,20 +42,16 @@ export default async function ComunicadosPage() {
                     href={c.archiveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between gap-4 bg-white rounded-2xl border border-gray-200 px-6 py-4 hover:border-ayala-light hover:shadow-sm transition-all group"
+                    className="flex items-center gap-4 bg-white rounded-2xl border border-gray-200 px-6 py-4 hover:border-ayala-light hover:shadow-sm transition-all group"
                   >
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-sm font-medium text-ayala-dark truncate group-hover:text-ayala-mid transition-colors">
-                        {c.titulo}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3 shrink-0">
-                      <span className="flex items-center gap-1 text-xs text-gray-400">
-                        <Calendar size={12} />
-                        {c.fecha}
-                      </span>
-                      <ExternalLink size={14} className="text-gray-300 group-hover:text-ayala-mid transition-colors" />
-                    </div>
+                    <span className="flex items-center gap-1.5 text-xs font-medium text-gray-600 shrink-0 w-24">
+                      <Calendar size={12} />
+                      {c.fecha}
+                    </span>
+                    <span className="text-sm font-medium text-ayala-dark truncate flex-1 group-hover:text-ayala-mid transition-colors">
+                      {c.titulo}
+                    </span>
+                    <ExternalLink size={14} className="text-gray-300 group-hover:text-ayala-mid transition-colors shrink-0" />
                   </a>
                 ))}
               </div>

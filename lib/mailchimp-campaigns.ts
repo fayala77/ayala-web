@@ -9,6 +9,7 @@ export interface Campaign {
   id: string
   titulo: string
   fecha: string
+  sendTime: string
   archiveUrl: string
 }
 
@@ -53,10 +54,11 @@ export async function getCampaignsByBuilding(building: string): Promise<Campaign
       id: c.id,
       titulo: c.settings?.subject_line ?? 'Comunicado',
       fecha: formatDate(c.send_time),
+      sendTime: c.send_time,
       archiveUrl: c.archive_url,
     })
   }
 
   // más reciente primero
-  return campaigns.sort((a, b) => b.fecha.localeCompare(a.fecha))
+  return campaigns.sort((a, b) => b.sendTime.localeCompare(a.sendTime))
 }
