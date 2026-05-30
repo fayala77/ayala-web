@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/auth'
 import { redirect } from 'next/navigation'
 import { MagicLinkForm } from './MagicLinkForm'
+import { LoginButton } from './LoginButton'
 import { Suspense } from 'react'
 
 export default async function LoginPage() {
@@ -18,6 +19,14 @@ export default async function LoginPage() {
         <p className="text-sm text-gray-500 mb-8">
           Ayala Gerencia & Administración
         </p>
+        <Suspense fallback={<div className="h-20" />}>
+          <LoginButton />
+        </Suspense>
+        <div className="flex items-center gap-3 my-4">
+          <div className="flex-1 h-px bg-gray-200" />
+          <span className="text-xs text-gray-400">o</span>
+          <div className="flex-1 h-px bg-gray-200" />
+        </div>
         <Suspense fallback={<div className="h-20" />}>
           <MagicLinkForm />
         </Suspense>
