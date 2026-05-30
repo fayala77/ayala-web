@@ -1,77 +1,78 @@
-export const portalContent = {
+interface Acta { titulo: string; fecha: string; tipo: string; archivo: string }
+interface Reglamento { titulo: string; descripcion: string; vigente: boolean; archivo: string }
+interface Comunicado { titulo: string; fecha: string; cuerpo: string; importante: boolean }
+interface EstadoCuenta { periodo: string; fecha: string; moneda: string; archivo: string }
+interface DocumentoItem { titulo: string; archivo: string; info: string }
+interface DocumentoCategoria { categoria: string; items: DocumentoItem[] }
+
+interface BuildingContent {
+  actas: Acta[]
+  reglamentos: Reglamento[]
+  comunicados: Comunicado[]
+  estadosCuenta: EstadoCuenta[]
+  documentos: DocumentoCategoria[]
+}
+
+export const portalContent: Record<string, BuildingContent> = {
   'Chesterfield Tower': {
     actas: [
-      { titulo: 'Asamblea Ordinaria 2026', fecha: '15/03/2026', tipo: 'Asamblea', archivo: '#' },
-      { titulo: 'Reunión CD — Febrero 2026', fecha: '10/02/2026', tipo: 'CD', archivo: '#' },
-      { titulo: 'Asamblea Extraordinaria — Obras', fecha: '20/11/2025', tipo: 'Asamblea', archivo: '#' },
-      { titulo: 'Asamblea Ordinaria 2025', fecha: '18/03/2025', tipo: 'Asamblea', archivo: '#' },
+      {
+        titulo: 'Convocatoria Asamblea Ordinaria 2024',
+        fecha: '15/01/2024',
+        tipo: 'Asamblea',
+        archivo: 'https://drive.google.com/file/d/1DaquHxftSzWxAC4l0OuwrFZDGJgItBUD/view?usp=sharing',
+      },
+      {
+        titulo: 'Moción Asamblea Extraordinaria — Abril 2023',
+        fecha: '22/04/2023',
+        tipo: 'Asamblea',
+        archivo: 'https://drive.google.com/file/d/1nIVTB8Btkxw6fyaTu2oIu3Jw5C00p6vV/view?usp=sharing',
+      },
+      {
+        titulo: 'Acta Asamblea Ordinaria 2023',
+        fecha: '20/01/2023',
+        tipo: 'Asamblea',
+        archivo: 'https://drive.google.com/file/d/1650rlxdNLNvFB12BnBQ1cNuGw2PfpJLT/view?usp=sharing',
+      },
     ],
     reglamentos: [
       {
         titulo: 'Reglamento de Copropiedad',
-        descripcion: 'Documento fundacional del régimen de propiedad horizontal.',
+        descripcion: 'Documento fundacional del régimen de propiedad horizontal. Año 2000.',
         vigente: true,
-        archivo: '#',
+        archivo: 'https://drive.google.com/file/d/1iPYtXlNcBwG3Y3c9jQzraDBGRv1a292a/view?usp=sharing',
       },
       {
-        titulo: 'Reglamento de Convivencia',
-        descripcion: 'Normas de convivencia y uso de espacios comunes.',
+        titulo: 'Modificación Reglamento de Copropiedad',
+        descripcion: 'Modificaciones aprobadas en Asamblea Extraordinaria. Marzo 2003.',
         vigente: true,
-        archivo: '#',
+        archivo: 'https://drive.google.com/file/d/1QVLC55fzlzdM4VaFgmvjcjOAxu4ad_RZ/view?usp=sharing',
       },
       {
-        titulo: 'Reglamento de Uso de Amenities',
-        descripcion: 'Normas para el uso de piscina, gimnasio y salón de usos múltiples.',
+        titulo: 'Disposiciones para Espacios Comunes',
+        descripcion: 'Normas de uso de piscina, parrilleros y parque. Compartido con Luna de Mar.',
         vigente: true,
-        archivo: '#',
+        archivo: 'https://drive.google.com/file/d/1sWOpIkQHW96htj3WxBAD1m4LLyNKiG6u/view?usp=sharing',
       },
     ],
     comunicados: [
       {
-        titulo: 'Corte de agua — Mantenimiento de cisternas',
-        fecha: '12/05/2026',
-        cuerpo: 'Se informa que el día jueves 15 de mayo se realizará el mantenimiento anual de cisternas. El corte de agua será de 9:00 a 14:00 hs aproximadamente. Disculpen las molestias.',
-        importante: true,
-      },
-      {
-        titulo: 'Recordatorio: pago de expensas junio',
-        fecha: '01/06/2026',
-        cuerpo: 'Les recordamos que el vencimiento para el pago de expensas del mes de junio es el 10 de junio. Pasada dicha fecha se aplicará el recargo correspondiente según el reglamento.',
-        importante: false,
-      },
-      {
         titulo: 'Nuevo acceso al portal digital',
-        fecha: '20/04/2026',
-        cuerpo: 'Ya está disponible el portal digital para propietarios. Pueden consultar actas, reglamentos, estados de cuenta y el saldo de expensas. Para solicitar acceso envíen un email a info@ayalaestudio.com.uy indicando su unidad.',
+        fecha: '30/05/2026',
+        cuerpo: 'Ya está disponible el portal digital para propietarios. Pueden consultar actas, reglamentos, estados de cuenta y documentos del edificio. Para cualquier consulta escribí a info@ayalaestudio.com.uy.',
         importante: false,
       },
     ],
-    estadosCuenta: [
-      { periodo: 'Enero – Marzo 2026', fecha: '15/04/2026', moneda: 'UYU', archivo: '#' },
-      { periodo: 'Octubre – Diciembre 2025', fecha: '15/01/2026', moneda: 'UYU', archivo: '#' },
-      { periodo: 'Julio – Septiembre 2025', fecha: '10/10/2025', moneda: 'UYU', archivo: '#' },
-      { periodo: 'Abril – Junio 2025', fecha: '10/07/2025', moneda: 'UYU', archivo: '#' },
-      { periodo: 'Enero – Marzo 2025', fecha: '12/04/2025', moneda: 'UYU', archivo: '#' },
-    ],
+    estadosCuenta: [],
     documentos: [
       {
-        categoria: 'Seguros',
+        categoria: 'Póliza de Incendios',
         items: [
-          { titulo: 'Póliza Seguro Incendio — SURA B444886', archivo: '#', info: 'Vence 31/03/2031' },
-          { titulo: 'Póliza BSE N° 5120709', archivo: '#', info: 'Vigente' },
-        ],
-      },
-      {
-        categoria: 'Datos bancarios',
-        items: [
-          { titulo: 'Cuentas bancarias del consorcio', archivo: '#', info: 'Banco Santander — Sucursal Centro' },
-        ],
-      },
-      {
-        categoria: 'Contratos y habilitaciones',
-        items: [
-          { titulo: 'Contrato de administración vigente', archivo: '#', info: '' },
-          { titulo: 'Habilitación municipal', archivo: '#', info: '' },
+          {
+            titulo: 'Póliza General 2026 — SURA B444886/6',
+            archivo: 'https://drive.google.com/file/d/1WjSJmoeS9j40Vib9Pv-cYBP7iq7L6pk8/view?usp=sharing',
+            info: 'Vigente hasta 31/03/2031 · Suma asegurada U$S 10.253.000',
+          },
         ],
       },
     ],
@@ -131,12 +132,12 @@ export const portalContent = {
       },
     ],
   },
-} as const
+}
 
 export type BuildingKey = keyof typeof portalContent
 
-export function getBuildingContent(building: string) {
-  return portalContent[building as BuildingKey] ?? null
+export function getBuildingContent(building: string): BuildingContent | null {
+  return portalContent[building] ?? null
 }
 
 export function getAllBuildingKeys(): BuildingKey[] {
