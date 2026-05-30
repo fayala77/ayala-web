@@ -27,6 +27,12 @@ export default async function DocumentosPage() {
                   {building}
                 </h2>
               )}
+              {content.documentos.length === 0 ? (
+                <div className="bg-white rounded-2xl border border-gray-200 px-6 py-10 text-center">
+                  <p className="text-sm text-gray-500 mb-1">No hay documentos disponibles aún.</p>
+                  <p className="text-xs text-gray-400">Consultás: info@ayalaestudio.com.uy</p>
+                </div>
+              ) : (
               <div className="space-y-8">
                 {content.documentos.map((cat) => (
                   <div key={cat.categoria}>
@@ -66,6 +72,7 @@ export default async function DocumentosPage() {
                   </div>
                 ))}
               </div>
+              )}
             </div>
           )
         })}

@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/auth'
 import { redirect } from 'next/navigation'
 import { getBuildingContent, getAccessibleBuildings } from '@/lib/portal-content'
-import { Download, Calendar } from 'lucide-react'
+import { ExternalLink, Calendar } from 'lucide-react'
 
 export default async function ActasPage() {
   const session = await getServerSession(authOptions)
@@ -27,43 +27,52 @@ export default async function ActasPage() {
                   {building}
                 </h2>
               )}
-              <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden overflow-x-auto">
-                <table className="w-full text-sm min-w-[500px]">
-                  <thead className="bg-ayala-bg-light border-b border-gray-200">
-                    <tr>
-                      <th className="text-left px-6 py-3 font-semibold text-gray-700">Documento</th>
-                      <th className="text-left px-6 py-3 font-semibold text-gray-700">Tipo</th>
-                      <th className="text-left px-6 py-3 font-semibold text-gray-700">Fecha</th>
-                      <th className="px-6 py-3"></th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    {content.actas.map((a) => (
-                      <tr key={a.titulo} className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4 font-medium text-ayala-dark">{a.titulo}</td>
-                        <td className="px-6 py-4">
-                          <span className="bg-ayala-bg text-ayala-mid text-xs font-medium px-2 py-0.5 rounded-full">
-                            {a.tipo}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-gray-500 flex items-center gap-1">
-                          <Calendar size={13} />
-                          {a.fecha}
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                          <a
-                            href={a.archivo}
-                            className="inline-flex items-center gap-1 text-ayala-mid hover:text-ayala-dark text-xs font-medium"
-                          >
-                            <Download size={13} />
-                            Descargar
-                          </a>
-                        </td>
+              {content.actas.length === 0 ? (
+                <div className="bg-white rounded-2xl border border-gray-200 px-6 py-10 text-center">
+                  <p className="text-sm text-gray-500 mb-1">No hay actas disponibles aún.</p>
+                  <p className="text-xs text-gray-400">Consultás: info@ayalaestudio.com.uy</p>
+                </div>
+              ) : (
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden overflow-x-auto">
+                  <table className="w-full text-sm min-w-[500px]">
+                    <thead className="bg-ayala-bg-light border-b border-gray-200">
+                      <tr>
+                        <th className="text-left px-6 py-3 font-semibold text-gray-700">Documento</th>
+                        <th className="text-left px-6 py-3 font-semibold text-gray-700">Tipo</th>
+                        <th className="text-left px-6 py-3 font-semibold text-gray-700">Fecha</th>
+                        <th className="px-6 py-3"></th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {content.actas.map((a) => (
+                        <tr key={a.titulo} className="hover:bg-gray-50 transition-colors">
+                          <td className="px-6 py-4 font-medium text-ayala-dark">{a.titulo}</td>
+                          <td className="px-6 py-4">
+                            <span className="bg-ayala-bg text-ayala-mid text-xs font-medium px-2 py-0.5 rounded-full">
+                              {a.tipo}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-gray-500 flex items-center gap-1">
+                            <Calendar size={13} />
+                            {a.fecha}
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <a
+                              href={a.archivo}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-ayala-mid hover:text-ayala-dark text-xs font-medium"
+                            >
+                              <ExternalLink size={13} />
+                              Ver
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           )
         })}
