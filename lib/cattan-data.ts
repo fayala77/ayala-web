@@ -28,6 +28,7 @@ export interface Contrato {
   moneda: 'USD' | 'UYU' | string
   montoMensual: number
   vencContrato: string
+  fechaInicioReal: string // DD/MM/YYYY o vacío
   pagos: Record<string, number>
 }
 
@@ -146,6 +147,7 @@ export function parseSheetData(rows: string[][]): DashboardData {
     return findCol(header, ['monto'])
   })()
   const colVenc = findCol(header, ['venc'])
+  const colInicioReal = findCol(header, ['inicio real', 'fecha inicio real', 'inicio_real'])
 
   const contratos: Contrato[] = []
   const seen = new Set<string>()
@@ -164,6 +166,7 @@ export function parseSheetData(rows: string[][]): DashboardData {
     const moneda = normalizeCurrency(row[colMoneda])
     const montoMensual = parseAmount(row[colMonto])
     const vencContrato = (row[colVenc] ?? '').trim()
+    const fechaInicioReal = colInicioReal >= 0 ? (row[colInicioReal] ?? '').trim() : ''
 
     const key = `${complejo}|${local}`
     if (seen.has(key)) continue
@@ -175,10 +178,24 @@ export function parseSheetData(rows: string[][]): DashboardData {
       if (amt > 0) pagos[mc.label] = amt
     }
 
-    contratos.push({ complejo, local, inquilino, moneda, montoMensual, vencContrato, pagos })
+    contratos.push({ complejo, local, inquilino, moneda, montoMensual, vencContrato, fechaInicioReal, pagos })
   }
 
   return { contratos, monthCols, fetchedAt: new Date().toISOString() }
+}
+
+// Retorna el sortKey (year*12+month) de la fecha inicio real, o null si no aplica
+function parseInicioRealKey(fechaInicioReal: string): number | null {
+  if (!fechaInicioReal) return null
+  // DD/MM/YYYY o D/M/YYYY
+  const m = fechaInicioReal.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/)
+  if (!m) return null
+  const day = parseInt(m[1])
+  const month = parseInt(m[2])
+  let year = parseInt(m[3])
+  if (year < 100) year += 2000
+  if (isNaN(month) || isNaN(year)) return null
+  return year * 12 + month
 }
 
 export function computeKPIs(
@@ -208,6 +225,10 @@ export function computeKPIs(
 
     const deudores: DeudorEntry[] = activos
       .map((c) => {
+        // Si el contrato empezó en el mes en curso o en el futuro, no es deudor
+        const inicioKey = parseInicioRealKey(c.fechaInicioReal)
+        if (inicioKey !== null && inicioKey >= currentKey) return null
+
         const paidCols = data.monthCols.filter(
           (m) => m.sortKey <= currentKey && c.pagos[m.label] > 0,
         )
