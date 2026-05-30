@@ -1,3 +1,10 @@
+const BUILDING_TAGS: Record<string, string[]> = {
+  'Chesterfield Tower': ['Chesterfield'],
+  'Luna de Mar': ['Luna de Mar'],
+  'Ocean Drive': ['Ocean Drive'],
+  'Cadaqués': ['Cadaqués', 'Cadaques'],
+}
+
 export interface Campaign {
   id: string
   titulo: string
@@ -39,7 +46,8 @@ export async function getCampaignsByBuilding(building: string): Promise<Campaign
 
   for (const c of data.campaigns ?? []) {
     const tags = extractTags(c.recipients?.segment_text ?? '')
-    if (!tags.includes(building)) continue
+    const expectedTags = BUILDING_TAGS[building] ?? [building]
+    if (!tags.some((t) => expectedTags.includes(t))) continue
 
     campaigns.push({
       id: c.id,
