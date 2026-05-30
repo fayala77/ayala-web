@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/auth'
 import { redirect } from 'next/navigation'
 import { getBuildingContent, getAccessibleBuildings } from '@/lib/portal-content'
-import { Download } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
 
 export default async function ReglamentosPage() {
   const session = await getServerSession(authOptions)
@@ -46,10 +46,12 @@ export default async function ReglamentosPage() {
                     </div>
                     <a
                       href={r.archivo}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="flex items-center gap-2 bg-ayala-bg text-ayala-mid text-sm font-medium px-4 py-2 rounded-lg hover:bg-ayala-dark hover:text-white transition-colors shrink-0"
                     >
-                      <Download size={14} />
-                      Descargar
+                      <ExternalLink size={14} />
+                      Ver
                     </a>
                   </div>
                 ))}
