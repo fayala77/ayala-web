@@ -35,7 +35,7 @@ export async function getCampaignsByBuilding(building: string): Promise<Campaign
       headers: {
         Authorization: `Basic ${Buffer.from(`anystring:${apiKey}`).toString('base64')}`,
       },
-      next: { revalidate: 3600 }, // cache 1 hora
+      next: { revalidate: 300 }, // cache 5 min como respaldo al webhook
     }
   )
 
