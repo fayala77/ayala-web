@@ -3,7 +3,7 @@ export interface AllowedUser {
   name: string
   building: string
   unit: string
-  role: 'admin' | 'propietario' | 'cd'
+  role: 'admin' | 'propietario' | 'cd' | 'cattan'
 }
 
 export const allowedUsers: AllowedUser[] = [
@@ -27,6 +27,13 @@ export const allowedUsers: AllowedUser[] = [
     building: 'Chesterfield Tower',
     unit: 'Admin',
     role: 'admin',
+  },
+  {
+    email: 'cattandani@gmail.com',
+    name: 'Daniel Cattan',
+    building: 'Inversiones Cattan',
+    unit: '',
+    role: 'cattan',
   },
   // Agregar propietarios aquí:
   // {
