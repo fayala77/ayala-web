@@ -1,7 +1,9 @@
 import type { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
+import CredentialsProvider from 'next-auth/providers/credentials'
 import { allowedUsers } from '@/lib/users'
 import { getMailchimpUser } from '@/lib/mailchimp'
+import { verifyMagicToken } from '@/lib/magic-link'
 
 declare module 'next-auth' {
   interface Session {
@@ -29,6 +31,23 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    CredentialsProvider({
+      name: 'Magic Link',
+      credentials: { token: { type: 'text' } },
+      async authorize(credentials) {
+        const payload = verifyMagicToken(credentials?.token ?? '')
+        if (!payload) return null
+
+        const { email } = payload
+        const admin = allowedUsers.find((u) => u.email === email)
+        if (admin) return { id: email, email, name: admin.name }
+
+        const mcUser = await getMailchimpUser(email)
+        if (mcUser) return { id: email, email, name: mcUser.name }
+
+        return null
+      },
     }),
   ],
   callbacks: {
@@ -69,7 +88,8 @@ export const authOptions: NextAuthOptions = {
     },
   },
   session: {
-    maxAge: 8 * 60 * 60, // 8 horas — limita la ventana de acceso con token stale
+    maxAge: 60 * 24 * 60 * 60, // 60 días
+    updateAge: 24 * 60 * 60,   // extiende el token una vez por día si hay actividad
   },
   pages: {
     signIn: '/login',

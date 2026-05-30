@@ -1,7 +1,8 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/auth'
 import { redirect } from 'next/navigation'
-import { LoginButton } from './LoginButton'
+import { MagicLinkForm } from './MagicLinkForm'
+import { Suspense } from 'react'
 
 export default async function LoginPage() {
   const session = await getServerSession(authOptions)
@@ -17,7 +18,9 @@ export default async function LoginPage() {
         <p className="text-sm text-gray-500 mb-8">
           Ayala Gerencia & Administración
         </p>
-        <LoginButton />
+        <Suspense fallback={<div className="h-20" />}>
+          <MagicLinkForm />
+        </Suspense>
         <p className="text-xs text-gray-400 mt-6">
           El acceso está restringido a propietarios y CD registrados.
           <br />
